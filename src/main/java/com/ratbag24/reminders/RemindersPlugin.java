@@ -1,6 +1,9 @@
 package com.ratbag24.reminders;
 
 import com.google.inject.Provides;
+import com.ratbag24.reminders.buff.BuffReminder;
+import com.ratbag24.reminders.buff.BuffSettings;
+import com.ratbag24.reminders.buff.Buffs;
 import com.ratbag24.reminders.heart.SaturatedHeartReminder;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,14 +27,14 @@ import net.runelite.client.ui.overlay.OverlayManager;
  * one switchable on its own.
  * <p>
  * The client's events are subscribed to once here and passed on to every
- * registered {@link Reminder}, so adding the next reminder means writing one
- * class and listing it in {@link #startUp()} rather than touching the event
- * plumbing.
+ * registered {@link Reminder}, so adding the next reminder means defining it
+ * and listing it in {@link #startUp()} rather than touching the event plumbing.
  */
 @PluginDescriptor(
 	name = "All-in-One Reminders",
 	description = "Reminds you when your saturated heart and other re-appliable buffs are ready",
-	tags = {"heart", "saturated", "imbued", "magic", "boost", "reminder", "timer", "cooldown"}
+	tags = {"heart", "saturated", "imbued", "thrall", "vengeance", "divine", "boost",
+		"reminder", "timer", "cooldown", "buff"}
 )
 public class RemindersPlugin extends Plugin
 {
@@ -43,6 +46,12 @@ public class RemindersPlugin extends Plugin
 
 	@Inject
 	private CombatTracker combatTracker;
+
+	@Inject
+	private ReminderContext reminderContext;
+
+	@Inject
+	private RemindersConfig config;
 
 	@Inject
 	private SaturatedHeartReminder saturatedHeartReminder;
@@ -60,7 +69,31 @@ public class RemindersPlugin extends Plugin
 	{
 		// Register each reminder here. The rest of the plugin does not care
 		// which ones exist.
+		//
+		// The heart has a class of its own because it tracks a cooldown with a
+		// countdown and two possible hearts behind one varbit. Everything else
+		// so far is a buff that is simply there or not, which one class covers:
+		// a new one needs a definition in Buffs, a config section, and a line
+		// here.
 		reminders.add(saturatedHeartReminder);
+
+		reminders.add(new BuffReminder(reminderContext, Buffs.THRALL, new BuffSettings(
+			config::thrallEnabled,
+			config::thrallNotification,
+			config::thrallReminderOverlay,
+			config::thrallOnlyInCombat)));
+
+		reminders.add(new BuffReminder(reminderContext, Buffs.VENGEANCE, new BuffSettings(
+			config::vengeanceEnabled,
+			config::vengeanceNotification,
+			config::vengeanceReminderOverlay,
+			config::vengeanceOnlyInCombat)));
+
+		reminders.add(new BuffReminder(reminderContext, Buffs.DIVINE_POTION, new BuffSettings(
+			config::divineEnabled,
+			config::divineNotification,
+			config::divineReminderOverlay,
+			config::divineOnlyInCombat)));
 
 		for (Reminder reminder : reminders)
 		{

@@ -7,16 +7,41 @@ import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.ConfigSection;
 import net.runelite.client.config.Notification;
 
+/**
+ * One section per reminder, each with its own Enable, so a reminder can be
+ * switched off without touching the others. Section positions go up in tens to
+ * leave room for the next one.
+ */
 @ConfigGroup(RemindersConfig.GROUP)
 public interface RemindersConfig extends Config
 {
 	String GROUP = "aioreminders";
 
 	// ------------------------------------------------------------------
+	// General
+	// ------------------------------------------------------------------
+
+	@ConfigSection(
+		name = "General",
+		description = "Settings shared by every reminder.",
+		position = 1
+	)
+	String generalSection = "generalSection";
+
+	@ConfigItem(
+		keyName = "chatMessages",
+		name = "Send chat messages",
+		description = "Also print a message in the game chat whenever a reminder fires.",
+		section = generalSection,
+		position = 1
+	)
+	default boolean chatMessages()
+	{
+		return false;
+	}
+
+	// ------------------------------------------------------------------
 	// Saturated heart
-	//
-	// Each reminder gets a section of its own, so adding the next one means
-	// adding a section here rather than reshuffling what is already there.
 	// ------------------------------------------------------------------
 
 	@ConfigSection(
@@ -89,23 +114,11 @@ public interface RemindersConfig extends Config
 	}
 
 	@ConfigItem(
-		keyName = "heartChatMessage",
-		name = "Send a chat message",
-		description = "Also print a message in the game chat when the heart recharges.",
-		section = heartSection,
-		position = 6
-	)
-	default boolean heartChatMessage()
-	{
-		return false;
-	}
-
-	@ConfigItem(
 		keyName = "heartRequireInInventory",
 		name = "Only when carrying one",
 		description = "Stay quiet unless a heart is actually in your inventory.",
 		section = heartSection,
-		position = 7
+		position = 6
 	)
 	default boolean heartRequireInInventory()
 	{
@@ -118,9 +131,188 @@ public interface RemindersConfig extends Config
 		description = "Stay quiet unless you have dealt or taken damage recently, so the"
 			+ " reminder does not follow you around the bank.",
 		section = heartSection,
-		position = 8
+		position = 7
 	)
 	default boolean heartOnlyInCombat()
+	{
+		return true;
+	}
+
+	// ------------------------------------------------------------------
+	// Thrall
+	// ------------------------------------------------------------------
+
+	@ConfigSection(
+		name = "Thrall",
+		description = "Reminds you when your resurrected thrall has expired.",
+		position = 20
+	)
+	String thrallSection = "thrallSection";
+
+	@ConfigItem(
+		keyName = "thrallEnabled",
+		name = "Enable",
+		description = "Remind you when a thrall you resurrected runs out.",
+		section = thrallSection,
+		position = 1
+	)
+	default boolean thrallEnabled()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "thrallNotification",
+		name = "Notify when expired",
+		description = "Fire a notification as the thrall leaves.",
+		section = thrallSection,
+		position = 2
+	)
+	default Notification thrallNotification()
+	{
+		return Notification.ON;
+	}
+
+	@ConfigItem(
+		keyName = "thrallReminderOverlay",
+		name = "Show on-screen reminder",
+		description = "Keep a reminder on screen for as long as you are without a thrall.",
+		section = thrallSection,
+		position = 3
+	)
+	default boolean thrallReminderOverlay()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "thrallOnlyInCombat",
+		name = "Only while fighting",
+		description = "Stay quiet unless you have dealt or taken damage recently.",
+		section = thrallSection,
+		position = 4
+	)
+	default boolean thrallOnlyInCombat()
+	{
+		return true;
+	}
+
+	// ------------------------------------------------------------------
+	// Vengeance
+	// ------------------------------------------------------------------
+
+	@ConfigSection(
+		name = "Vengeance",
+		description = "Reminds you when vengeance can be cast again.",
+		position = 30
+	)
+	String vengeanceSection = "vengeanceSection";
+
+	@ConfigItem(
+		keyName = "vengeanceEnabled",
+		name = "Enable",
+		description = "Remind you once both the cooldown has run out and the cast you were"
+			+ " holding has rebounded.",
+		section = vengeanceSection,
+		position = 1
+	)
+	default boolean vengeanceEnabled()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "vengeanceNotification",
+		name = "Notify when ready",
+		description = "Fire a notification as vengeance becomes castable again.",
+		section = vengeanceSection,
+		position = 2
+	)
+	default Notification vengeanceNotification()
+	{
+		return Notification.ON;
+	}
+
+	@ConfigItem(
+		keyName = "vengeanceReminderOverlay",
+		name = "Show on-screen reminder",
+		description = "Keep a reminder on screen for as long as vengeance is uncast.",
+		section = vengeanceSection,
+		position = 3
+	)
+	default boolean vengeanceReminderOverlay()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "vengeanceOnlyInCombat",
+		name = "Only while fighting",
+		description = "Stay quiet unless you have dealt or taken damage recently. Turn this"
+			+ " off if you would rather be reminded before a fight starts than during it.",
+		section = vengeanceSection,
+		position = 4
+	)
+	default boolean vengeanceOnlyInCombat()
+	{
+		return true;
+	}
+
+	// ------------------------------------------------------------------
+	// Divine potions
+	// ------------------------------------------------------------------
+
+	@ConfigSection(
+		name = "Divine potions",
+		description = "Reminds you when a divine potion's boost has worn off.",
+		position = 40
+	)
+	String divineSection = "divineSection";
+
+	@ConfigItem(
+		keyName = "divineEnabled",
+		name = "Enable",
+		description = "Remind you when the last of a divine potion's boosts runs out.",
+		section = divineSection,
+		position = 1
+	)
+	default boolean divineEnabled()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "divineNotification",
+		name = "Notify when worn off",
+		description = "Fire a notification as the boost ends.",
+		section = divineSection,
+		position = 2
+	)
+	default Notification divineNotification()
+	{
+		return Notification.ON;
+	}
+
+	@ConfigItem(
+		keyName = "divineReminderOverlay",
+		name = "Show on-screen reminder",
+		description = "Keep a reminder on screen for as long as you are without the boost.",
+		section = divineSection,
+		position = 3
+	)
+	default boolean divineReminderOverlay()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "divineOnlyInCombat",
+		name = "Only while fighting",
+		description = "Stay quiet unless you have dealt or taken damage recently.",
+		section = divineSection,
+		position = 4
+	)
+	default boolean divineOnlyInCombat()
 	{
 		return true;
 	}

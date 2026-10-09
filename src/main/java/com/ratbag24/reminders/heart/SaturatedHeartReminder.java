@@ -1,25 +1,18 @@
 package com.ratbag24.reminders.heart;
 
-import com.ratbag24.reminders.CombatTracker;
 import com.ratbag24.reminders.Reminder;
+import com.ratbag24.reminders.ReminderContext;
 import com.ratbag24.reminders.RemindersConfig;
 import java.util.Locale;
 import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import net.runelite.api.ChatMessageType;
-import net.runelite.api.Client;
 import net.runelite.api.ItemContainer;
 import net.runelite.api.events.ItemContainerChanged;
 import net.runelite.api.events.VarbitChanged;
 import net.runelite.api.gameval.InventoryID;
 import net.runelite.api.gameval.ItemID;
 import net.runelite.api.gameval.VarbitID;
-import net.runelite.client.Notifier;
-import net.runelite.client.chat.ChatColorType;
-import net.runelite.client.chat.ChatMessageBuilder;
-import net.runelite.client.chat.ChatMessageManager;
-import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.ui.overlay.infobox.InfoBoxManager;
@@ -40,19 +33,10 @@ public class SaturatedHeartReminder implements Reminder
 	private final HeartCooldown cooldown = new HeartCooldown();
 
 	@Inject
-	private Client client;
+	private ReminderContext ctx;
 
 	@Inject
 	private RemindersConfig config;
-
-	@Inject
-	private CombatTracker combatTracker;
-
-	@Inject
-	private Notifier notifier;
-
-	@Inject
-	private ChatMessageManager chatMessageManager;
 
 	@Inject
 	private InfoBoxManager infoBoxManager;
@@ -145,7 +129,7 @@ public class SaturatedHeartReminder implements Reminder
 		{
 			// Seed from the current value on the first tick after logging in.
 			// Adopting the value this way never counts as the heart recharging.
-			cooldown.onVarbitValue(client.getVarbitValue(VarbitID.IMBUED_HEART_TIMER),
+			cooldown.onVarbitValue(ctx.getClient().getVarbitValue(VarbitID.IMBUED_HEART_TIMER),
 				System.currentTimeMillis());
 			syncInfoBox();
 		}
@@ -187,20 +171,7 @@ public class SaturatedHeartReminder implements Reminder
 		}
 
 		final String heartName = cooldown.getType().getDisplayName().toLowerCase(Locale.ENGLISH);
-		notifier.notify(config.heartNotification(), "Your " + heartName + " has recharged.");
-
-		if (config.heartChatMessage())
-		{
-			final String message = new ChatMessageBuilder()
-				.append(ChatColorType.HIGHLIGHT)
-				.append("Your " + heartName + " has recharged.")
-				.build();
-
-			chatMessageManager.queue(QueuedMessage.builder()
-				.type(ChatMessageType.CONSOLE)
-				.runeLiteFormattedMessage(message)
-				.build());
-		}
+		ctx.announce(config.heartNotification(), "Your " + heartName + " has recharged.");
 	}
 
 	/** Whether the heart on cooldown is one the user asked to be reminded about. */
@@ -216,12 +187,12 @@ public class SaturatedHeartReminder implements Reminder
 			return false;
 		}
 
-		return !config.heartOnlyInCombat() || combatTracker.isInCombat();
+		return !config.heartOnlyInCombat() || ctx.isInCombat();
 	}
 
 	private boolean carryingHeart()
 	{
-		final ItemContainer inventory = client.getItemContainer(InventoryID.INV);
+		final ItemContainer inventory = ctx.getClient().getItemContainer(InventoryID.INV);
 		if (inventory == null)
 		{
 			return false;
