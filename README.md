@@ -15,6 +15,9 @@ the end of it:
   set up in RuneLite's own notification settings.
 - An **on-screen reminder** that stays up for as long as the buff is missing,
   listed in one shared panel rather than a box each.
+- A **visual**: a coloured glow throbs around the edge of the game view while
+  anything is asking for attention, and the heart itself throbs in your
+  inventory while it is ready to invigorate.
 - **Only while fighting**, on by default, so nothing follows you round the bank.
   Combat means having dealt or taken damage in the last ten seconds.
 
@@ -60,8 +63,14 @@ divine super combat potion.
 
 ## Settings
 
-A **General** section holds the one setting shared by everything — *Send chat
-messages*, off by default, which also prints each reminder in the chat box.
+A **General** section holds the settings shared by everything: *Send chat
+messages* (off by default), *Flash the screen edge* (on), and the *Flash colour*
+used by both the screen edge and the item highlight.
+
+The pulse is a slow sine rather than a blink — one cycle every 1.4 seconds. A
+hard on/off flash at a few hertz is harder to ignore for everyone and a real
+problem for photosensitive players; this reads as "look here" without strobing.
+Turning the colour's alpha down makes it subtler, and the toggle turns it off.
 
 Every reminder then gets a section with *Enable*, *Notify*, *Show on-screen
 reminder* and *Only while fighting*. The saturated heart adds three of its own:
@@ -70,6 +79,7 @@ reminder* and *Only while fighting*. The saturated heart adds three of its own:
 | --- | --- | --- |
 | Hearts to track | Imbued and saturated | Restrict it to the saturated heart's shorter cooldown if you have both. |
 | Show cooldown timer | on | Infobox counting the cooldown down. |
+| Flash the heart in your inventory | on | Throb the heart itself while it is ready, so the thing to click is lit up. |
 | Only when carrying one | on | Stay quiet when no heart is in your inventory. |
 
 ## How the game state is read
@@ -153,6 +163,10 @@ src/main/java/com/ratbag24/reminders/
     BuffSettings.java             one buff's settings, read live
     BuffReminder.java             the reminder shared by every buff
     BuffState.java                buff tracking rules, no RuneLite deps
+  visual/
+    Pulse.java                    the shared throb curve, no RuneLite deps
+    ScreenFlashOverlay.java       the glow around the game view
+    ItemFlashOverlay.java         the highlight on the heart in your inventory
   heart/
     SaturatedHeartReminder.java   the heart, which needs more than a buff does
     HeartCooldown.java            cooldown timing rules, no RuneLite deps
@@ -161,9 +175,10 @@ src/main/java/com/ratbag24/reminders/
     HeartInfoBox.java             the countdown infobox
 ```
 
-`HeartCooldown` and `BuffState` deliberately have no RuneLite imports: the
+`HeartCooldown`, `BuffState` and `Pulse` deliberately have no RuneLite imports: the
 timing rules are the part most likely to be subtly wrong, so they are kept
-testable on their own. Between them `HeartCooldownTest` and `BuffStateTest`
-cover the login sync, the death reset, early re-use, heart identification, the
-display countdown, vengeance's two varbits, and one divine potion reminding once
-rather than four times.
+testable on their own. Between them `HeartCooldownTest`, `BuffStateTest` and
+`PulseTest` cover the login sync, the death reset, early re-use, heart
+identification, the display countdown, vengeance's two varbits, one divine
+potion reminding once rather than four times, and the pulse curve staying in
+bounds and meeting itself smoothly at the seam.

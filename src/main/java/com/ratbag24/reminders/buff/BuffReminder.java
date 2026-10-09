@@ -80,23 +80,24 @@ public class BuffReminder implements Reminder
 		}
 	}
 
-	@Nullable
 	@Override
-	public String getReminderText()
+	public boolean isNudging()
 	{
-		if (!isEnabled() || !settings.isShowReminder())
+		if (!isEnabled() || !state.isSynced() || state.isActive())
 		{
-			return null;
+			return false;
 		}
 
 		// Nothing is said to a player who has not had this buff up at all: not
 		// having cast vengeance is the normal state for most of the game.
-		if (!state.isSynced() || state.isActive() || !state.hasBeenActive())
-		{
-			return null;
-		}
+		return state.hasBeenActive() && conditionsMet();
+	}
 
-		return conditionsMet() ? definition.getReminderText() : null;
+	@Nullable
+	@Override
+	public String getReminderText()
+	{
+		return isNudging() && settings.isShowReminder() ? definition.getReminderText() : null;
 	}
 
 	private boolean conditionsMet()

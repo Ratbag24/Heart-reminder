@@ -1,6 +1,8 @@
 package com.ratbag24.reminders;
 
 import com.ratbag24.reminders.heart.TrackedHearts;
+import java.awt.Color;
+import net.runelite.client.config.Alpha;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
@@ -38,6 +40,32 @@ public interface RemindersConfig extends Config
 	default boolean chatMessages()
 	{
 		return false;
+	}
+
+	@ConfigItem(
+		keyName = "screenFlash",
+		name = "Flash the screen edge",
+		description = "Throb a coloured glow around the edge of the game view while any"
+			+ " reminder is asking for attention, and stop as soon as none is.",
+		section = generalSection,
+		position = 2
+	)
+	default boolean screenFlash()
+	{
+		return true;
+	}
+
+	@Alpha
+	@ConfigItem(
+		keyName = "flashColour",
+		name = "Flash colour",
+		description = "The colour used for the screen edge and for highlighting an item.",
+		section = generalSection,
+		position = 3
+	)
+	default Color flashColour()
+	{
+		return new Color(255, 48, 48, 170);
 	}
 
 	// ------------------------------------------------------------------
@@ -114,11 +142,24 @@ public interface RemindersConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "heartItemFlash",
+		name = "Flash the heart in your inventory",
+		description = "Throb the heart in your inventory while it is ready to invigorate,"
+			+ " so the thing to click is the thing that is lit up.",
+		section = heartSection,
+		position = 6
+	)
+	default boolean heartItemFlash()
+	{
+		return true;
+	}
+
+	@ConfigItem(
 		keyName = "heartRequireInInventory",
 		name = "Only when carrying one",
 		description = "Stay quiet unless a heart is actually in your inventory.",
 		section = heartSection,
-		position = 6
+		position = 7
 	)
 	default boolean heartRequireInInventory()
 	{
@@ -131,7 +172,7 @@ public interface RemindersConfig extends Config
 		description = "Stay quiet unless you have dealt or taken damage recently, so the"
 			+ " reminder does not follow you around the bank.",
 		section = heartSection,
-		position = 7
+		position = 8
 	)
 	default boolean heartOnlyInCombat()
 	{

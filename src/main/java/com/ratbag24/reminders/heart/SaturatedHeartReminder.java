@@ -141,26 +141,45 @@ public class SaturatedHeartReminder implements Reminder
 		syncInfoBox();
 	}
 
+	@Override
+	public boolean isNudging()
+	{
+		if (!isEnabled() || !cooldown.isSynced() || cooldown.isOnCooldown())
+		{
+			return false;
+		}
+
+		return isTracked() && conditionsMet();
+	}
+
 	@Nullable
 	@Override
 	public String getReminderText()
 	{
-		if (!isEnabled() || !config.heartReminderOverlay())
+		return isNudging() && config.heartReminderOverlay()
+			? cooldown.getType().getDisplayName() + " ready"
+			: null;
+	}
+
+	/**
+	 * Whether an item sitting in the inventory should be highlighted right now.
+	 * Asked by the item overlay, so that which hearts count stays here rather
+	 * than being worked out twice.
+	 */
+	public boolean shouldFlashItem(int itemId)
+	{
+		if (!config.heartItemFlash() || !isNudging())
 		{
-			return null;
+			return false;
 		}
 
-		if (!cooldown.isSynced() || cooldown.isOnCooldown() || !isTracked())
+		if (itemId == ItemID.SATURATED_HEART)
 		{
-			return null;
+			return true;
 		}
 
-		if (!conditionsMet())
-		{
-			return null;
-		}
-
-		return cooldown.getType().getDisplayName() + " ready";
+		return config.heartTrackedHearts() == TrackedHearts.BOTH
+			&& itemId == ItemID.IMBUED_HEART;
 	}
 
 	private void announceReady()

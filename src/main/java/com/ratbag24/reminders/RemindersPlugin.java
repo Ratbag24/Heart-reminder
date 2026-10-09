@@ -5,6 +5,8 @@ import com.ratbag24.reminders.buff.BuffReminder;
 import com.ratbag24.reminders.buff.BuffSettings;
 import com.ratbag24.reminders.buff.Buffs;
 import com.ratbag24.reminders.heart.SaturatedHeartReminder;
+import com.ratbag24.reminders.visual.ItemFlashOverlay;
+import com.ratbag24.reminders.visual.ScreenFlashOverlay;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -43,6 +45,12 @@ public class RemindersPlugin extends Plugin
 
 	@Inject
 	private RemindersOverlay overlay;
+
+	@Inject
+	private ScreenFlashOverlay screenFlashOverlay;
+
+	@Inject
+	private ItemFlashOverlay itemFlashOverlay;
 
 	@Inject
 	private CombatTracker combatTracker;
@@ -101,12 +109,16 @@ public class RemindersPlugin extends Plugin
 		}
 
 		overlayManager.add(overlay);
+		overlayManager.add(screenFlashOverlay);
+		overlayManager.add(itemFlashOverlay);
 	}
 
 	@Override
 	protected void shutDown()
 	{
 		overlayManager.remove(overlay);
+		overlayManager.remove(screenFlashOverlay);
+		overlayManager.remove(itemFlashOverlay);
 
 		for (Reminder reminder : reminders)
 		{
@@ -181,6 +193,24 @@ public class RemindersPlugin extends Plugin
 		{
 			reminder.onConfigChanged();
 		}
+	}
+
+	/**
+	 * Whether any enabled reminder is asking for attention, which is what the
+	 * screen edge flash follows. Independent of the text panel, so the two can
+	 * be switched on and off separately.
+	 */
+	public boolean isAnyReminderNudging()
+	{
+		for (Reminder reminder : reminders)
+		{
+			if (reminder.isNudging())
+			{
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

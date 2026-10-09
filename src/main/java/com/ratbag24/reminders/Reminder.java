@@ -57,6 +57,19 @@ public interface Reminder
 	}
 
 	/**
+	 * Whether this reminder wants the player's attention right now, whatever
+	 * form that attention takes.
+	 * <p>
+	 * Kept separate from {@link #getReminderText()} so that the visuals and the
+	 * text panel can be switched on and off independently: someone who wants
+	 * only a flashing screen edge should still get one.
+	 */
+	default boolean isNudging()
+	{
+		return false;
+	}
+
+	/**
 	 * What to show on the reminder overlay right now, or null when this
 	 * reminder has nothing to say.
 	 */
