@@ -10,7 +10,6 @@ import javax.inject.Singleton;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.ItemContainer;
-import net.runelite.api.Varbits;
 import net.runelite.api.events.ItemContainerChanged;
 import net.runelite.api.events.VarbitChanged;
 import net.runelite.api.gameval.InventoryID;
@@ -110,7 +109,7 @@ public class SaturatedHeartReminder implements Reminder
 			return;
 		}
 
-		if (event.getVarbitId() != Varbits.IMBUED_HEART_COOLDOWN)
+		if (event.getVarbitId() != VarbitID.IMBUED_HEART_TIMER)
 		{
 			return;
 		}
@@ -146,7 +145,7 @@ public class SaturatedHeartReminder implements Reminder
 		{
 			// Seed from the current value on the first tick after logging in.
 			// Adopting the value this way never counts as the heart recharging.
-			cooldown.onVarbitValue(client.getVarbitValue(Varbits.IMBUED_HEART_COOLDOWN),
+			cooldown.onVarbitValue(client.getVarbitValue(VarbitID.IMBUED_HEART_TIMER),
 				System.currentTimeMillis());
 			syncInfoBox();
 		}

@@ -37,7 +37,7 @@ What it does:
 
 ### How the cooldown is read
 
-`Varbits.IMBUED_HEART_COOLDOWN` (varbit 5361) holds the remaining cooldown in
+`VarbitID.IMBUED_HEART_TIMER` (varbit 5361) holds the remaining cooldown in
 steps of ten game ticks, which is the same varbit RuneLite's own Timers plugin
 uses for its "Imbued/Saturated heart" timer. That gives two things:
 
@@ -89,9 +89,9 @@ Everything below `Reminder` is one reminder's business, and nothing else's:
 new reminder does not touch the event plumbing. `CombatTracker` is shared, so
 "only while fighting" is one method call for any reminder that wants it.
 
-Worth knowing for the thrall reminder specifically: `Varbits.RESURRECT_THRALL`
-is 1 while a thrall is up and drops to 0 when it expires, which is the same
-shape as the heart's varbit reaching zero. Thrall duration is one tick per Magic
+Worth knowing for the thrall reminder specifically:
+`VarbitID.ARCEUUS_RESURRECTION_ACTIVE` is 1 while a thrall is up and drops to 0
+when it expires, which is the same shape as the heart's varbit reaching zero. Thrall duration is one tick per Magic
 level, +50% at Master and +100% at Grandmaster combat achievement tier.
 
 ## Layout
