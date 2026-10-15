@@ -10,9 +10,9 @@ import net.runelite.api.events.VarbitChanged;
  * through varbits that are non-zero while it lasts.
  * <p>
  * One instance per buff, built from a {@link BuffDefinition}. The notification
- * fires on the buff running out; the on-screen line, in contrast, reflects the
- * ongoing state of not having it, which also covers a buff never applied in the
- * first place.
+ * fires once, on the buff running out; the banner, in contrast, reflects the
+ * ongoing state of not having it, which also covers a buff that has been let
+ * lapse rather than only one that just went.
  */
 public class BuffReminder implements Reminder
 {
@@ -27,12 +27,6 @@ public class BuffReminder implements Reminder
 		this.definition = definition;
 		this.settings = settings;
 		this.state = new BuffState(definition.getVarbits());
-	}
-
-	@Override
-	public String getName()
-	{
-		return definition.getName();
 	}
 
 	@Override
@@ -93,24 +87,11 @@ public class BuffReminder implements Reminder
 		return state.hasBeenActive() && conditionsMet();
 	}
 
-	@Override
-	public boolean isRelevant()
-	{
-		return isEnabled() && settings.isShowReminder() && state.isSynced()
-			&& state.hasBeenActive();
-	}
-
-	@Override
-	public boolean isUp()
-	{
-		return state.isActive();
-	}
-
 	@Nullable
 	@Override
 	public String getAlertText()
 	{
-		return isNudging() ? definition.getAlertText() : null;
+		return isNudging() && settings.isShowReminder() ? definition.getAlertText() : null;
 	}
 
 	private boolean conditionsMet()

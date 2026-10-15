@@ -8,16 +8,12 @@ import net.runelite.client.plugins.Plugin;
 /**
  * One thing the plugin can remind you about.
  * <p>
- * Everything here is optional bar the name, whether the reminder is switched on
- * and what it currently wants to say, so a new reminder only has to implement
- * the events it actually cares about. {@link RemindersPlugin} subscribes to the
+ * Everything here is optional bar whether the reminder is switched on, so a new
+ * reminder only has to implement the events it actually cares about. {@link RemindersPlugin} subscribes to the
  * client's events once and hands them to every registered reminder.
  */
 public interface Reminder
 {
-	/** Name used in log messages and as the heading on the overlay. */
-	String getName();
-
 	/** Whether the user has this reminder switched on. */
 	boolean isEnabled();
 
@@ -60,31 +56,11 @@ public interface Reminder
 	 * Whether this reminder wants the player's attention right now, whatever
 	 * form that attention takes.
 	 * <p>
-	 * Kept separate from {@link #isRelevant()} so that the visuals and the
-	 * status panel can be switched on and off independently: someone who wants
-	 * only a flashing screen edge should still get one.
+	 * Kept separate from {@link #getAlertText()} so that the screen edge and
+	 * the banner can be switched on and off independently: someone who wants
+	 * only a flashing edge should still get one.
 	 */
 	default boolean isNudging()
-	{
-		return false;
-	}
-
-	/**
-	 * Whether this reminder is worth a line in the status panel: the player
-	 * uses this buff and has it switched on. A buff nobody has applied since
-	 * logging in is not listed, so the panel fills itself with what you
-	 * actually use rather than everything the plugin knows about.
-	 */
-	default boolean isRelevant()
-	{
-		return false;
-	}
-
-	/**
-	 * Whether the thing being tracked is currently up, which is what decides
-	 * the colour of its line.
-	 */
-	default boolean isUp()
 	{
 		return false;
 	}

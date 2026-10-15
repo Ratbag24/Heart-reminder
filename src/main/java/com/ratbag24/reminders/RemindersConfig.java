@@ -31,49 +31,12 @@ public interface RemindersConfig extends Config
 	String generalSection = "generalSection";
 
 	@ConfigItem(
-		keyName = "statusPanel",
-		name = "Status panel",
-		description = "The movable panel listing the buffs you are using, green while they"
-			+ " are up and red once they need re-applying. Drag it anywhere on screen.",
-		section = generalSection,
-		position = 1
-	)
-	default PanelMode statusPanel()
-	{
-		return PanelMode.ALL;
-	}
-
-	@ConfigItem(
-		keyName = "upColour",
-		name = "Colour when up",
-		description = "The colour for a buff that is still running.",
-		section = generalSection,
-		position = 2
-	)
-	default Color upColour()
-	{
-		return new Color(86, 201, 109);
-	}
-
-	@ConfigItem(
-		keyName = "downColour",
-		name = "Colour when down",
-		description = "The colour for a buff that needs re-applying.",
-		section = generalSection,
-		position = 3
-	)
-	default Color downColour()
-	{
-		return new Color(255, 73, 73);
-	}
-
-	@ConfigItem(
 		keyName = "alertBanner",
 		name = "Alert banner",
 		description = "A banner saying what to do about whatever is down, in white on red."
 			+ " Drag it wherever suits.",
 		section = generalSection,
-		position = 4
+		position = 1
 	)
 	default boolean alertBanner()
 	{
@@ -85,7 +48,7 @@ public interface RemindersConfig extends Config
 		name = "Alert banner colour",
 		description = "The background colour of the alert banner.",
 		section = generalSection,
-		position = 5
+		position = 2
 	)
 	default Color alertColour()
 	{
@@ -98,7 +61,7 @@ public interface RemindersConfig extends Config
 		description = "Throb a coloured glow around the edge of the game view while any"
 			+ " reminder is asking for attention, and stop as soon as none is.",
 		section = generalSection,
-		position = 6
+		position = 3
 	)
 	default boolean screenFlash()
 	{
@@ -111,7 +74,7 @@ public interface RemindersConfig extends Config
 		name = "Flash colour",
 		description = "The colour used for the screen edge and for highlighting an item.",
 		section = generalSection,
-		position = 7
+		position = 4
 	)
 	default Color flashColour()
 	{
@@ -123,7 +86,7 @@ public interface RemindersConfig extends Config
 		name = "Send chat messages",
 		description = "Also print a message in the game chat whenever a reminder fires.",
 		section = generalSection,
-		position = 8
+		position = 5
 	)
 	default boolean chatMessages()
 	{
@@ -180,8 +143,8 @@ public interface RemindersConfig extends Config
 
 	@ConfigItem(
 		keyName = "heartReminderOverlay",
-		name = "Show in status panel",
-		description = "List the heart in the status panel.",
+		name = "Show in alert banner",
+		description = "Let the heart put its line on the alert banner.",
 		section = heartSection,
 		position = 4
 	)
@@ -277,8 +240,8 @@ public interface RemindersConfig extends Config
 
 	@ConfigItem(
 		keyName = "thrallReminderOverlay",
-		name = "Show in status panel",
-		description = "List this in the status panel once you have used it.",
+		name = "Show in alert banner",
+		description = "Let this put its line on the alert banner.",
 		section = thrallSection,
 		position = 3
 	)
@@ -336,8 +299,8 @@ public interface RemindersConfig extends Config
 
 	@ConfigItem(
 		keyName = "vengeanceReminderOverlay",
-		name = "Show in status panel",
-		description = "List this in the status panel once you have used it.",
+		name = "Show in alert banner",
+		description = "Let this put its line on the alert banner.",
 		section = vengeanceSection,
 		position = 3
 	)
@@ -395,8 +358,8 @@ public interface RemindersConfig extends Config
 
 	@ConfigItem(
 		keyName = "divineReminderOverlay",
-		name = "Show in status panel",
-		description = "List this in the status panel once you have used it.",
+		name = "Show in alert banner",
+		description = "Let this put its line on the alert banner.",
 		section = divineSection,
 		position = 3
 	)
@@ -454,8 +417,8 @@ public interface RemindersConfig extends Config
 
 	@ConfigItem(
 		keyName = "deathChargeReminderOverlay",
-		name = "Show in status panel",
-		description = "List this in the status panel once you have used it.",
+		name = "Show in alert banner",
+		description = "Let this put its line on the alert banner.",
 		section = deathChargeSection,
 		position = 3
 	)
@@ -513,8 +476,8 @@ public interface RemindersConfig extends Config
 
 	@ConfigItem(
 		keyName = "shadowVeilReminderOverlay",
-		name = "Show in status panel",
-		description = "List this in the status panel once you have used it.",
+		name = "Show in alert banner",
+		description = "Let this put its line on the alert banner.",
 		section = shadowVeilSection,
 		position = 3
 	)
@@ -572,8 +535,8 @@ public interface RemindersConfig extends Config
 
 	@ConfigItem(
 		keyName = "antifireReminderOverlay",
-		name = "Show in status panel",
-		description = "List this in the status panel once you have used it.",
+		name = "Show in alert banner",
+		description = "Let this put its line on the alert banner.",
 		section = antifireSection,
 		position = 3
 	)
@@ -631,8 +594,8 @@ public interface RemindersConfig extends Config
 
 	@ConfigItem(
 		keyName = "staminaReminderOverlay",
-		name = "Show in status panel",
-		description = "List this in the status panel once you have used it.",
+		name = "Show in alert banner",
+		description = "Let this put its line on the alert banner.",
 		section = staminaSection,
 		position = 3
 	)
@@ -690,8 +653,8 @@ public interface RemindersConfig extends Config
 
 	@ConfigItem(
 		keyName = "magicImbueReminderOverlay",
-		name = "Show in status panel",
-		description = "List this in the status panel once you have used it.",
+		name = "Show in alert banner",
+		description = "Let this put its line on the alert banner.",
 		section = magicImbueSection,
 		position = 3
 	)
@@ -749,8 +712,8 @@ public interface RemindersConfig extends Config
 
 	@ConfigItem(
 		keyName = "menaphiteRemedyReminderOverlay",
-		name = "Show in status panel",
-		description = "List this in the status panel once you have used it.",
+		name = "Show in alert banner",
+		description = "Let this put its line on the alert banner.",
 		section = menaphiteRemedySection,
 		position = 3
 	)

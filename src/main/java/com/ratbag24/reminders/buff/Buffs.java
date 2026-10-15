@@ -21,7 +21,6 @@ public final class Buffs
 	 * achievement tier, and its varbit drops to zero the moment it leaves.
 	 */
 	public static final BuffDefinition THRALL = new BuffDefinition(
-		"Thrall",
 		"Your thrall has expired.",
 		"You need a thrall!",
 		VarbitID.ARCEUUS_RESURRECTION_ACTIVE);
@@ -32,7 +31,6 @@ public final class Buffs
 	 * there is anything worth saying.
 	 */
 	public static final BuffDefinition VENGEANCE = new BuffDefinition(
-		"Vengeance",
 		"Vengeance is ready to cast.",
 		"You need vengeance!",
 		VarbitID.VENGEANCE_TIMELIMIT,
@@ -44,7 +42,6 @@ public final class Buffs
 	 * would fire several times for one potion.
 	 */
 	public static final BuffDefinition DIVINE_POTION = new BuffDefinition(
-		"Divine potion",
 		"Your divine potion has worn off.",
 		"You need a divine potion!",
 		VarbitID.DIVINECOMBAT_POTION_TIME,
@@ -58,14 +55,12 @@ public final class Buffs
 
 	/** Death charge lasts a tick per Magic level and is worth re-casting at once. */
 	public static final BuffDefinition DEATH_CHARGE = new BuffDefinition(
-		"Death charge",
 		"Your death charge has expired.",
 		"You need to death charge!",
 		VarbitID.ARCEUUS_DEATH_CHARGE_ACTIVE);
 
 	/** Shadow veil, for thieving and for staying unseen. */
 	public static final BuffDefinition SHADOW_VEIL = new BuffDefinition(
-		"Shadow veil",
 		"Your shadow veil has expired.",
 		"You need shadow veil!",
 		VarbitID.ARCEUUS_SHADOW_VEIL_ACTIVE);
@@ -75,7 +70,6 @@ public final class Buffs
 	 * ordinary one is still going is not the moment to warn about dragonfire.
 	 */
 	public static final BuffDefinition ANTIFIRE = new BuffDefinition(
-		"Antifire",
 		"Your antifire has run out.",
 		"You need antifire!",
 		VarbitID.ANTIFIRE_POTION,
@@ -83,21 +77,18 @@ public final class Buffs
 
 	/** Stamina, which is about running rather than fighting. */
 	public static final BuffDefinition STAMINA = new BuffDefinition(
-		"Stamina",
 		"Your stamina potion has run out.",
 		"You need stamina!",
 		VarbitID.STAMINA_DURATION);
 
 	/** Magic imbue, for the runes it saves on alchemy and superheating. */
 	public static final BuffDefinition MAGIC_IMBUE = new BuffDefinition(
-		"Magic imbue",
 		"Your magic imbue has run out.",
 		"You need magic imbue!",
 		VarbitID.MAGIC_IMBUE_ACTIVE);
 
 	/** Menaphite remedy, which keeps stats topped up while it lasts. */
 	public static final BuffDefinition MENAPHITE_REMEDY = new BuffDefinition(
-		"Menaphite remedy",
 		"Your menaphite remedy has worn off.",
 		"You need a menaphite remedy!",
 		VarbitID.STATRENEWAL_POTION_TIMER);

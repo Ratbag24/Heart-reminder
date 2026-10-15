@@ -45,9 +45,6 @@ public class RemindersPlugin extends Plugin
 	private OverlayManager overlayManager;
 
 	@Inject
-	private RemindersOverlay overlay;
-
-	@Inject
 	private AlertBannerOverlay alertBannerOverlay;
 
 	@Inject
@@ -148,7 +145,6 @@ public class RemindersPlugin extends Plugin
 			reminder.startUp(this);
 		}
 
-		overlayManager.add(overlay);
 		overlayManager.add(alertBannerOverlay);
 		overlayManager.add(screenFlashOverlay);
 		overlayManager.add(itemFlashOverlay);
@@ -157,7 +153,6 @@ public class RemindersPlugin extends Plugin
 	@Override
 	protected void shutDown()
 	{
-		overlayManager.remove(overlay);
 		overlayManager.remove(alertBannerOverlay);
 		overlayManager.remove(screenFlashOverlay);
 		overlayManager.remove(itemFlashOverlay);
@@ -281,12 +276,4 @@ public class RemindersPlugin extends Plugin
 		return alerts == null ? Collections.emptyList() : alerts;
 	}
 
-	/**
-	 * The registered reminders, in registration order. Read by the status
-	 * panel on the client thread while it renders.
-	 */
-	List<Reminder> getReminders()
-	{
-		return Collections.unmodifiableList(reminders);
-	}
 }

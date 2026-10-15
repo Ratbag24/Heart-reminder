@@ -146,38 +146,13 @@ public class SaturatedHeartReminder implements Reminder
 		return isTracked() && conditionsMet();
 	}
 
-	@Override
-	public String getName()
-	{
-		return cooldown.getType().getDisplayName();
-	}
-
-	@Override
-	public boolean isRelevant()
-	{
-		if (!isEnabled() || !config.heartReminderOverlay() || !cooldown.isSynced() || !isTracked())
-		{
-			return false;
-		}
-
-		return !config.heartRequireInInventory() || carryingHeart();
-	}
-
-	/**
-	 * The heart's boost and its cooldown run out together, so a heart still on
-	 * cooldown is a heart whose boost is still running: up, and nothing to do.
-	 */
-	@Override
-	public boolean isUp()
-	{
-		return cooldown.isOnCooldown();
-	}
-
 	@Nullable
 	@Override
 	public String getAlertText()
 	{
-		return isNudging() ? "Your " + lowerCaseName() + " is ready!" : null;
+		return isNudging() && config.heartReminderOverlay()
+			? "Your " + lowerCaseName() + " is ready!"
+			: null;
 	}
 
 	/**

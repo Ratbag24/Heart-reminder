@@ -1,27 +1,8 @@
 # All-in-One Reminders
 
-A RuneLite plugin for the buffs you have to keep re-applying. One movable panel
-shows what you are using, green while it is up and red once it needs doing
-again, with a toggle for every reminder.
-
-## The panel
-
-Drag it anywhere on screen. It lists only what you actually use — a buff you
-have not applied since logging in gets no line — so it fills itself in rather
-than showing you ten things you never touch.
-
-```
-Reminders
-Saturated heart      UP
-Thrall             DOWN
-Death charge         UP
-```
-
-Each line says `UP` or `DOWN` as well as being coloured. Red and green are the
-worst pair to tell apart for the commonest kind of colour blindness, so the
-colour is never the only thing carrying the meaning. Both colours are
-configurable, and the panel can be set to show everything, only what is down, or
-nothing at all.
+A RuneLite plugin for the buffs you have to keep re-applying. When one lapses it
+tells you so in words, where you are already looking, with a toggle for every
+reminder.
 
 ## What it tracks
 
@@ -57,6 +38,10 @@ Phrased as the thing to do rather than the state you are in — mid-fight, "You
 need to death charge!" lands faster than "Death charge: down". It stacks if more
 than one thing is down, and drags wherever suits.
 
+It only speaks up about buffs you actually use. Not having cast vengeance is the
+normal state for most of the game, so a reminder stays quiet until you have shown
+you want it by casting it once.
+
 ## The rest of it
 
 - A **notification** when something runs out, in whatever form you have set up in
@@ -65,9 +50,8 @@ than one thing is down, and drags wherever suits.
   the edge rather than washing the view — the middle of the screen is where the
   fight is.
 - The **heart lights up in your inventory** until you use it.
-- **Only while fighting**, on by default for the combat buffs, so notifications
-  and the flash stay quiet at the bank. The panel is not combat-gated: it is
-  information, not a nag.
+- **Only while fighting**, on by default for the combat buffs, so nothing
+  follows you round the bank.
 
 The pulse is a slow sine, one cycle every 1.4 seconds, rather than a blink. A
 hard flash at a few hertz is harder to ignore for everyone and a real problem for
@@ -129,8 +113,6 @@ item to check for — implements `Reminder` directly, as the heart does.
 src/main/java/com/ratbag24/reminders/
   RemindersPlugin.java        event plumbing and the reminder registry
   RemindersConfig.java        one @ConfigSection per reminder
-  RemindersOverlay.java       the movable status panel
-  PanelMode.java              how much that panel shows
   Reminder.java               what a reminder has to implement
   ReminderContext.java        services every reminder needs
   CombatTracker.java          shared "was I fighting recently" state
