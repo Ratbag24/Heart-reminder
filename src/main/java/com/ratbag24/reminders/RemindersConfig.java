@@ -68,12 +68,37 @@ public interface RemindersConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "alertBanner",
+		name = "Alert banner",
+		description = "A banner saying what to do about whatever is down, in white on red."
+			+ " Drag it wherever suits.",
+		section = generalSection,
+		position = 4
+	)
+	default boolean alertBanner()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "alertColour",
+		name = "Alert banner colour",
+		description = "The background colour of the alert banner.",
+		section = generalSection,
+		position = 5
+	)
+	default Color alertColour()
+	{
+		return new Color(176, 26, 36);
+	}
+
+	@ConfigItem(
 		keyName = "screenFlash",
 		name = "Flash the screen edge",
 		description = "Throb a coloured glow around the edge of the game view while any"
 			+ " reminder is asking for attention, and stop as soon as none is.",
 		section = generalSection,
-		position = 4
+		position = 6
 	)
 	default boolean screenFlash()
 	{
@@ -86,7 +111,7 @@ public interface RemindersConfig extends Config
 		name = "Flash colour",
 		description = "The colour used for the screen edge and for highlighting an item.",
 		section = generalSection,
-		position = 5
+		position = 7
 	)
 	default Color flashColour()
 	{
@@ -98,7 +123,7 @@ public interface RemindersConfig extends Config
 		name = "Send chat messages",
 		description = "Also print a message in the game chat whenever a reminder fires.",
 		section = generalSection,
-		position = 6
+		position = 8
 	)
 	default boolean chatMessages()
 	{

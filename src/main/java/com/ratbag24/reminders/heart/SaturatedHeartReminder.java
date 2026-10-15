@@ -4,6 +4,7 @@ import com.ratbag24.reminders.Reminder;
 import com.ratbag24.reminders.ReminderContext;
 import com.ratbag24.reminders.RemindersConfig;
 import java.util.Locale;
+import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.runelite.api.ItemContainer;
@@ -172,6 +173,13 @@ public class SaturatedHeartReminder implements Reminder
 		return cooldown.isOnCooldown();
 	}
 
+	@Nullable
+	@Override
+	public String getAlertText()
+	{
+		return isNudging() ? "Your " + lowerCaseName() + " is ready!" : null;
+	}
+
 	/**
 	 * Whether an item sitting in the inventory should be highlighted right now.
 	 * Asked by the item overlay, so that which hearts count stays here rather
@@ -200,8 +208,13 @@ public class SaturatedHeartReminder implements Reminder
 			return;
 		}
 
-		final String heartName = cooldown.getType().getDisplayName().toLowerCase(Locale.ENGLISH);
-		ctx.announce(config.heartNotification(), "Your " + heartName + " has recharged.");
+		ctx.announce(config.heartNotification(),
+			"Your " + lowerCaseName() + " has recharged.");
+	}
+
+	private String lowerCaseName()
+	{
+		return cooldown.getType().getDisplayName().toLowerCase(Locale.ENGLISH);
 	}
 
 	/** Whether the heart on cooldown is one the user asked to be reminded about. */

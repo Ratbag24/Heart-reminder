@@ -1,5 +1,6 @@
 package com.ratbag24.reminders;
 
+import javax.annotation.Nullable;
 import net.runelite.api.events.ItemContainerChanged;
 import net.runelite.api.events.VarbitChanged;
 import net.runelite.client.plugins.Plugin;
@@ -86,5 +87,17 @@ public interface Reminder
 	default boolean isUp()
 	{
 		return false;
+	}
+
+	/**
+	 * What the alert banner should say while this reminder is nudging, or null
+	 * when it has nothing to shout about. Phrased as the thing to do rather
+	 * than the state you are in: mid-fight, "You need to death charge!" lands
+	 * faster than "Death charge: down".
+	 */
+	@Nullable
+	default String getAlertText()
+	{
+		return null;
 	}
 }

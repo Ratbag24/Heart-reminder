@@ -12,18 +12,23 @@ public final class BuffDefinition
 {
 	private final String name;
 	private final String notificationMessage;
+	private final String alertText;
 	private final int[] varbits;
 
 	/**
 	 * @param name                 the buff's name, shown in the status panel
 	 * @param notificationMessage  the one-off message sent as it runs out
+	 * @param alertText            the banner's wording, phrased as the thing to
+	 *                             do rather than the state you are in
 	 * @param varbits              every varbit that is non-zero while any part
 	 *                             of the buff is still running
 	 */
-	public BuffDefinition(String name, String notificationMessage, int... varbits)
+	public BuffDefinition(String name, String notificationMessage, String alertText,
+		int... varbits)
 	{
 		this.name = name;
 		this.notificationMessage = notificationMessage;
+		this.alertText = alertText;
 		this.varbits = varbits.clone();
 	}
 
@@ -35,6 +40,11 @@ public final class BuffDefinition
 	public String getNotificationMessage()
 	{
 		return notificationMessage;
+	}
+
+	public String getAlertText()
+	{
+		return alertText;
 	}
 
 	public int[] getVarbits()

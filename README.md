@@ -43,6 +43,20 @@ varbit while they are up, so RuneLite's own timers work them out from a chat
 message and a duration. That is a different mechanism from everything above, and
 guessing at it would be worse than leaving them out.
 
+## The alert banner
+
+When something needs doing, a banner says what, in white on red:
+
+```
++-----------------------------+
+|  You need to death charge!  |
++-----------------------------+
+```
+
+Phrased as the thing to do rather than the state you are in — mid-fight, "You
+need to death charge!" lands faster than "Death charge: down". It stacks if more
+than one thing is down, and drags wherever suits.
+
 ## The rest of it
 
 - A **notification** when something runs out, in whatever form you have set up in
@@ -128,6 +142,7 @@ src/main/java/com/ratbag24/reminders/
     BuffState.java                buff tracking rules, no RuneLite deps
   visual/
     Pulse.java                    the shared throb curve, no RuneLite deps
+    AlertBannerOverlay.java       the white-on-red "you need to X" banner
     ScreenFlashOverlay.java       the glow around the game view
     ItemFlashOverlay.java         the highlight on the heart in your inventory
   heart/

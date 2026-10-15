@@ -5,6 +5,7 @@ import com.ratbag24.reminders.buff.BuffReminder;
 import com.ratbag24.reminders.buff.BuffSettings;
 import com.ratbag24.reminders.buff.Buffs;
 import com.ratbag24.reminders.heart.SaturatedHeartReminder;
+import com.ratbag24.reminders.visual.AlertBannerOverlay;
 import com.ratbag24.reminders.visual.ItemFlashOverlay;
 import com.ratbag24.reminders.visual.ScreenFlashOverlay;
 import java.util.ArrayList;
@@ -45,6 +46,9 @@ public class RemindersPlugin extends Plugin
 
 	@Inject
 	private RemindersOverlay overlay;
+
+	@Inject
+	private AlertBannerOverlay alertBannerOverlay;
 
 	@Inject
 	private ScreenFlashOverlay screenFlashOverlay;
@@ -145,6 +149,7 @@ public class RemindersPlugin extends Plugin
 		}
 
 		overlayManager.add(overlay);
+		overlayManager.add(alertBannerOverlay);
 		overlayManager.add(screenFlashOverlay);
 		overlayManager.add(itemFlashOverlay);
 	}
@@ -153,6 +158,7 @@ public class RemindersPlugin extends Plugin
 	protected void shutDown()
 	{
 		overlayManager.remove(overlay);
+		overlayManager.remove(alertBannerOverlay);
 		overlayManager.remove(screenFlashOverlay);
 		overlayManager.remove(itemFlashOverlay);
 
@@ -247,6 +253,32 @@ public class RemindersPlugin extends Plugin
 		}
 
 		return false;
+	}
+
+	/**
+	 * What the alert banner should be shouting, one line per reminder that is
+	 * currently nudging. Read on the client thread while the overlay renders.
+	 */
+	public List<String> getAlerts()
+	{
+		List<String> alerts = null;
+
+		for (Reminder reminder : reminders)
+		{
+			final String alert = reminder.getAlertText();
+
+			if (alert != null)
+			{
+				if (alerts == null)
+				{
+					alerts = new ArrayList<>(reminders.size());
+				}
+
+				alerts.add(alert);
+			}
+		}
+
+		return alerts == null ? Collections.emptyList() : alerts;
 	}
 
 	/**
