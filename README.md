@@ -50,7 +50,12 @@ When something needs doing, a banner says what, in white on red:
 
 Phrased as the thing to do rather than the state you are in — mid-fight, "You
 need to death charge!" lands faster than "Death charge: down". It stacks if more
-than one thing is down, and drags wherever suits.
+than one thing is down.
+
+**Drag it wherever you want it.** Same for the heart's cooldown timer — both are
+ordinary RuneLite overlays, so you move them by dragging and the client
+remembers where you put them. Its colour and its size are settings too, so
+nothing about it has to be taken as given.
 
 It only speaks up about buffs you actually use. Not having cast vengeance is the
 normal state for most of the game, so a reminder stays quiet until you have shown

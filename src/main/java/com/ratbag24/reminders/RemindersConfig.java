@@ -1,6 +1,7 @@
 package com.ratbag24.reminders;
 
 import com.ratbag24.reminders.heart.TrackedHearts;
+import com.ratbag24.reminders.visual.BannerFont;
 import java.awt.Color;
 import net.runelite.client.config.Alpha;
 import net.runelite.client.config.Config;
@@ -44,11 +45,24 @@ public interface RemindersConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "bannerFont",
+		name = "Alert banner size",
+		description = "Which of the game's typefaces the banner is drawn in, and so how"
+			+ " big it is.",
+		section = generalSection,
+		position = 2
+	)
+	default BannerFont bannerFont()
+	{
+		return BannerFont.LARGE;
+	}
+
+	@ConfigItem(
 		keyName = "alertColour",
 		name = "Alert banner colour",
 		description = "The background colour of the alert banner.",
 		section = generalSection,
-		position = 2
+		position = 3
 	)
 	default Color alertColour()
 	{
@@ -63,7 +77,7 @@ public interface RemindersConfig extends Config
 		description = "Throb a coloured glow around the edge of the game view while any"
 			+ " reminder is asking for attention, and stop as soon as none is.",
 		section = generalSection,
-		position = 3
+		position = 4
 	)
 	default boolean screenFlash()
 	{
@@ -76,7 +90,7 @@ public interface RemindersConfig extends Config
 		name = "Flash colour",
 		description = "The colour used for the screen edge and for highlighting an item.",
 		section = generalSection,
-		position = 4
+		position = 5
 	)
 	default Color flashColour()
 	{
@@ -88,7 +102,7 @@ public interface RemindersConfig extends Config
 		name = "Send chat messages",
 		description = "Also print a message in the game chat whenever a reminder fires.",
 		section = generalSection,
-		position = 5
+		position = 6
 	)
 	default boolean chatMessages()
 	{

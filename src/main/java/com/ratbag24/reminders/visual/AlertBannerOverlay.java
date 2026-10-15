@@ -8,7 +8,6 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.util.List;
 import javax.inject.Inject;
-import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -58,7 +57,7 @@ public class AlertBannerOverlay extends Overlay
 			return null;
 		}
 
-		graphics.setFont(FontManager.getRunescapeBoldFont());
+		graphics.setFont(config.bannerFont().getFont());
 
 		final FontMetrics metrics = graphics.getFontMetrics();
 		final Color background = config.alertColour();
