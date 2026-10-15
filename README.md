@@ -6,20 +6,27 @@ reminder.
 
 ## What it tracks
 
-| Reminder | Notes |
-| --- | --- |
-| Saturated / imbued heart | Plus a cooldown timer, and the heart lights up in your inventory |
-| Thrall | |
-| Vengeance | Ready once the cooldown ends *and* the held cast has rebounded |
-| Divine potions | All eight varbits together, so one potion reminds once |
-| Death charge | |
-| Shadow veil | |
-| Antifire | Plain and super together |
-| Stamina | |
-| Magic imbue | |
-| Menaphite remedy | |
-| Mark of Darkness | Timed from the chat message — see below |
-| Ward of Arceuus | Timed from the chat message — see below |
+Twelve buffs, each switchable on its own.
+
+- **Saturated / imbued heart** — also gets a cooldown timer, and lights up in
+  your inventory when it is ready
+- **Thrall** — lasts a tick per Magic level, doubled at Grandmaster combat
+  achievement tier
+- **Vengeance** — ready once the cooldown ends *and* the held cast has rebounded,
+  so it waits for whichever happens second
+- **Divine potions** — all eight varbits watched together, so one potion reminds
+  once rather than four times
+- **Death charge** — lasts a tick per Magic level
+- **Shadow veil** — for thieving, so it is not combat-gated by default
+- **Antifire** — plain and super watched together, so a super running out under
+  an ordinary one says nothing
+- **Stamina** — about running rather than fighting, so not combat-gated by
+  default
+- **Magic imbue** — for the runes it saves on alchemy and superheating, so not
+  combat-gated by default
+- **Menaphite remedy** — keeps your stats topped up while it lasts
+- **Mark of Darkness** — timed from the chat message, see below
+- **Ward of Arceuus** — timed from the chat message, see below
 
 **Mark of Darkness and Ward of Arceuus work differently.** The game gives them no
 varbit at all — the only sign either was cast is a line of chat. So they are
@@ -75,6 +82,23 @@ you want it by casting it once.
 The pulse is a slow sine, one cycle every 1.4 seconds, rather than a blink. A
 hard flash at a few hertz is harder to ignore for everyone and a real problem for
 photosensitive players.
+
+## Settings
+
+**General** — whether the alert banner shows, its size and its colour; whether
+the screen edge flashes and in what colour; and whether reminders also print in
+the chat box.
+
+**Every reminder** has the same four: *Enable*, *Notify*, *Show in alert banner*
+and *Only while fighting*. So a reminder can be kept but quietened — notification
+only, no banner — rather than switched off entirely.
+
+**The heart** adds four of its own: which hearts to track, whether to show the
+cooldown timer, whether to light the heart up in your inventory, and whether to
+stay quiet unless you are actually carrying one.
+
+The banner and the cooldown timer are ordinary RuneLite overlays, so drag them
+wherever you want and the client remembers.
 
 ## How the game state is read
 
