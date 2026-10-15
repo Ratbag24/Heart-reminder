@@ -62,7 +62,9 @@ public class AlertBannerOverlay extends Overlay
 
 		final FontMetrics metrics = graphics.getFontMetrics();
 		final Color background = config.alertColour();
-		final Color border = background.brighter();
+		// Darker rather than lighter: it holds the banner's shape against a
+		// bright scene, where a pale outline washes out.
+		final Color border = background.darker();
 
 		int width = 0;
 

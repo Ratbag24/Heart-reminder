@@ -52,7 +52,9 @@ public interface RemindersConfig extends Config
 	)
 	default Color alertColour()
 	{
-		return new Color(176, 26, 36);
+		// Sampled from the game's own red: slightly darker and less saturated
+		// than a flat red, which sits better over the scene behind it.
+		return new Color(156, 43, 36);
 	}
 
 	@ConfigItem(
