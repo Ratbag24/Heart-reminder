@@ -18,11 +18,25 @@ reminder.
 | Stamina | |
 | Magic imbue | |
 | Menaphite remedy | |
+| Mark of Darkness | Timed from the chat message — see below |
+| Ward of Arceuus | Timed from the chat message — see below |
 
-**Ward of Arceuus and Mark of Darkness are not here.** The game gives them no
-varbit while they are up, so RuneLite's own timers work them out from a chat
-message and a duration. That is a different mechanism from everything above, and
-guessing at it would be worse than leaving them out.
+**Mark of Darkness and Ward of Arceuus work differently.** The game gives them no
+varbit at all — the only sign either was cast is a line of chat. So they are
+timed the way RuneLite's own timers do it: hear the cast, run a clock for one
+tick per Magic level, remind when it runs out.
+
+That is less certain than a varbit, in two ways worth knowing:
+
+- The duration is a rule about the spell rather than something the game
+  confirms, so a change to the spell would silently make it wrong.
+- Logging in with one already running is invisible, because the chat line came
+  and went before you arrived. Tracking starts at your next cast, and until then
+  nothing is claimed either way — it stays quiet rather than announcing an expiry
+  it cannot actually know about.
+
+Everything else in the table is read straight from a varbit and has neither
+problem.
 
 ## The alert banner
 
@@ -116,8 +130,13 @@ src/main/java/com/ratbag24/reminders/
   Reminder.java               what a reminder has to implement
   ReminderContext.java        services every reminder needs
   CombatTracker.java          shared "was I fighting recently" state
+  chat/
+    ChatBuffs.java                Mark of Darkness and Ward of Arceuus
+    ChatBuffDefinition.java       one chat-announced buff as data
+    ChatBuffReminder.java         hears the cast, times the rest
+    TimedBuffState.java           the clock, no RuneLite deps
   buff/
-    Buffs.java                    the nine buff definitions
+    Buffs.java                    the nine varbit-backed buff definitions
     BuffDefinition.java           one buff as data
     BuffSettings.java             one buff's settings, read live
     BuffReminder.java             the reminder shared by every buff
@@ -135,8 +154,9 @@ src/main/java/com/ratbag24/reminders/
     HeartInfoBox.java             the countdown infobox
 ```
 
-`HeartCooldown`, `BuffState` and `Pulse` deliberately have no RuneLite imports:
+`HeartCooldown`, `BuffState`, `TimedBuffState` and `Pulse` deliberately have no
+RuneLite imports:
 the timing rules are the part most likely to be subtly wrong, so they are kept
-testable on their own. Fifty tests cover the login sync, the death reset, early
+testable on their own. Sixty-one tests cover the login sync, the death reset, early
 re-use, heart identification, the display countdown, vengeance's two varbits, one
 divine potion reminding once rather than four times, and the pulse curve.

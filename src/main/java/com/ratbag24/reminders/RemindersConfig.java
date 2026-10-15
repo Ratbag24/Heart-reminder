@@ -735,4 +735,124 @@ public interface RemindersConfig extends Config
 	{
 		return true;
 	}
+
+	// ------------------------------------------------------------------
+	// Mark of Darkness
+	// ------------------------------------------------------------------
+
+	@ConfigSection(
+		name = "Mark of Darkness",
+		description = "Reminds you when your Mark of Darkness has expired. Timed from the chat message, as the game"
+			+ " gives no other sign.",
+		position = 110
+	)
+	String markOfDarknessSection = "markOfDarknessSection";
+
+	@ConfigItem(
+		keyName = "markOfDarknessEnabled",
+		name = "Enable",
+		description = "Remind you when your Mark of Darkness has expired.",
+		section = markOfDarknessSection,
+		position = 1
+	)
+	default boolean markOfDarknessEnabled()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "markOfDarknessNotification",
+		name = "Notify",
+		description = "Fire a notification when your Mark of Darkness has expired.",
+		section = markOfDarknessSection,
+		position = 2
+	)
+	default Notification markOfDarknessNotification()
+	{
+		return Notification.ON;
+	}
+
+	@ConfigItem(
+		keyName = "markOfDarknessReminderOverlay",
+		name = "Show in alert banner",
+		description = "Let this put its line on the alert banner.",
+		section = markOfDarknessSection,
+		position = 3
+	)
+	default boolean markOfDarknessReminderOverlay()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "markOfDarknessOnlyInCombat",
+		name = "Only while fighting",
+		description = "Only notify and flash while you have dealt or taken damage recently.",
+		section = markOfDarknessSection,
+		position = 4
+	)
+	default boolean markOfDarknessOnlyInCombat()
+	{
+		return true;
+	}
+
+	// ------------------------------------------------------------------
+	// Ward of Arceuus
+	// ------------------------------------------------------------------
+
+	@ConfigSection(
+		name = "Ward of Arceuus",
+		description = "Reminds you when your Ward of Arceuus has expired. Timed from the chat message, as the game"
+			+ " gives no other sign.",
+		position = 120
+	)
+	String wardOfArceuusSection = "wardOfArceuusSection";
+
+	@ConfigItem(
+		keyName = "wardOfArceuusEnabled",
+		name = "Enable",
+		description = "Remind you when your Ward of Arceuus has expired.",
+		section = wardOfArceuusSection,
+		position = 1
+	)
+	default boolean wardOfArceuusEnabled()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "wardOfArceuusNotification",
+		name = "Notify",
+		description = "Fire a notification when your Ward of Arceuus has expired.",
+		section = wardOfArceuusSection,
+		position = 2
+	)
+	default Notification wardOfArceuusNotification()
+	{
+		return Notification.ON;
+	}
+
+	@ConfigItem(
+		keyName = "wardOfArceuusReminderOverlay",
+		name = "Show in alert banner",
+		description = "Let this put its line on the alert banner.",
+		section = wardOfArceuusSection,
+		position = 3
+	)
+	default boolean wardOfArceuusReminderOverlay()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "wardOfArceuusOnlyInCombat",
+		name = "Only while fighting",
+		description = "Only notify and flash while you have dealt or taken damage recently.",
+		section = wardOfArceuusSection,
+		position = 4
+	)
+	default boolean wardOfArceuusOnlyInCombat()
+	{
+		return true;
+	}
 }

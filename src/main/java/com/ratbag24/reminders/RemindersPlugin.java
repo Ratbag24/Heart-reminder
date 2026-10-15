@@ -4,6 +4,8 @@ import com.google.inject.Provides;
 import com.ratbag24.reminders.buff.BuffReminder;
 import com.ratbag24.reminders.buff.BuffSettings;
 import com.ratbag24.reminders.buff.Buffs;
+import com.ratbag24.reminders.chat.ChatBuffReminder;
+import com.ratbag24.reminders.chat.ChatBuffs;
 import com.ratbag24.reminders.heart.SaturatedHeartReminder;
 import com.ratbag24.reminders.visual.AlertBannerOverlay;
 import com.ratbag24.reminders.visual.ItemFlashOverlay;
@@ -13,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 import net.runelite.api.GameState;
+import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.HitsplatApplied;
@@ -140,6 +143,21 @@ public class RemindersPlugin extends Plugin
 			config::menaphiteRemedyReminderOverlay,
 			config::menaphiteRemedyOnlyInCombat)));
 
+		// These two have no varbit: they are timed from their chat message.
+		reminders.add(new ChatBuffReminder(reminderContext, ChatBuffs.MARK_OF_DARKNESS,
+			new BuffSettings(
+				config::markOfDarknessEnabled,
+				config::markOfDarknessNotification,
+				config::markOfDarknessReminderOverlay,
+				config::markOfDarknessOnlyInCombat)));
+
+		reminders.add(new ChatBuffReminder(reminderContext, ChatBuffs.WARD_OF_ARCEUUS,
+			new BuffSettings(
+				config::wardOfArceuusEnabled,
+				config::wardOfArceuusNotification,
+				config::wardOfArceuusReminderOverlay,
+				config::wardOfArceuusOnlyInCombat)));
+
 		for (Reminder reminder : reminders)
 		{
 			reminder.startUp(this);
@@ -207,6 +225,15 @@ public class RemindersPlugin extends Plugin
 	public void onHitsplatApplied(HitsplatApplied event)
 	{
 		combatTracker.onHitsplatApplied(event);
+	}
+
+	@Subscribe
+	public void onChatMessage(ChatMessage event)
+	{
+		for (Reminder reminder : reminders)
+		{
+			reminder.onChatMessage(event);
+		}
 	}
 
 	@Subscribe

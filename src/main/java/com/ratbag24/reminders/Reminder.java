@@ -1,6 +1,7 @@
 package com.ratbag24.reminders;
 
 import javax.annotation.Nullable;
+import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.ItemContainerChanged;
 import net.runelite.api.events.VarbitChanged;
 import net.runelite.client.plugins.Plugin;
@@ -44,6 +45,10 @@ public interface Reminder
 	}
 
 	default void onGameTick()
+	{
+	}
+
+	default void onChatMessage(ChatMessage event)
 	{
 	}
 
