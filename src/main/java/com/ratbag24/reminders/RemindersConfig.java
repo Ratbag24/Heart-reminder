@@ -31,15 +31,40 @@ public interface RemindersConfig extends Config
 	String generalSection = "generalSection";
 
 	@ConfigItem(
-		keyName = "chatMessages",
-		name = "Send chat messages",
-		description = "Also print a message in the game chat whenever a reminder fires.",
+		keyName = "statusPanel",
+		name = "Status panel",
+		description = "The movable panel listing the buffs you are using, green while they"
+			+ " are up and red once they need re-applying. Drag it anywhere on screen.",
 		section = generalSection,
 		position = 1
 	)
-	default boolean chatMessages()
+	default PanelMode statusPanel()
 	{
-		return false;
+		return PanelMode.ALL;
+	}
+
+	@ConfigItem(
+		keyName = "upColour",
+		name = "Colour when up",
+		description = "The colour for a buff that is still running.",
+		section = generalSection,
+		position = 2
+	)
+	default Color upColour()
+	{
+		return new Color(86, 201, 109);
+	}
+
+	@ConfigItem(
+		keyName = "downColour",
+		name = "Colour when down",
+		description = "The colour for a buff that needs re-applying.",
+		section = generalSection,
+		position = 3
+	)
+	default Color downColour()
+	{
+		return new Color(255, 73, 73);
 	}
 
 	@ConfigItem(
@@ -48,7 +73,7 @@ public interface RemindersConfig extends Config
 		description = "Throb a coloured glow around the edge of the game view while any"
 			+ " reminder is asking for attention, and stop as soon as none is.",
 		section = generalSection,
-		position = 2
+		position = 4
 	)
 	default boolean screenFlash()
 	{
@@ -61,11 +86,23 @@ public interface RemindersConfig extends Config
 		name = "Flash colour",
 		description = "The colour used for the screen edge and for highlighting an item.",
 		section = generalSection,
-		position = 3
+		position = 5
 	)
 	default Color flashColour()
 	{
 		return new Color(255, 48, 48, 170);
+	}
+
+	@ConfigItem(
+		keyName = "chatMessages",
+		name = "Send chat messages",
+		description = "Also print a message in the game chat whenever a reminder fires.",
+		section = generalSection,
+		position = 6
+	)
+	default boolean chatMessages()
+	{
+		return false;
 	}
 
 	// ------------------------------------------------------------------
@@ -118,9 +155,8 @@ public interface RemindersConfig extends Config
 
 	@ConfigItem(
 		keyName = "heartReminderOverlay",
-		name = "Show on-screen reminder",
-		description = "Keep a reminder on screen for as long as the heart is ready to use,"
-			+ " rather than only announcing it once.",
+		name = "Show in status panel",
+		description = "List the heart in the status panel.",
 		section = heartSection,
 		position = 4
 	)
@@ -169,8 +205,8 @@ public interface RemindersConfig extends Config
 	@ConfigItem(
 		keyName = "heartOnlyInCombat",
 		name = "Only while fighting",
-		description = "Stay quiet unless you have dealt or taken damage recently, so the"
-			+ " reminder does not follow you around the bank.",
+		description = "Only notify and flash while you have dealt or taken damage recently,"
+			+ " so nothing follows you around the bank.",
 		section = heartSection,
 		position = 8
 	)
@@ -193,7 +229,7 @@ public interface RemindersConfig extends Config
 	@ConfigItem(
 		keyName = "thrallEnabled",
 		name = "Enable",
-		description = "Remind you when a thrall you resurrected runs out.",
+		description = "Remind you when your resurrected thrall has expired.",
 		section = thrallSection,
 		position = 1
 	)
@@ -204,8 +240,8 @@ public interface RemindersConfig extends Config
 
 	@ConfigItem(
 		keyName = "thrallNotification",
-		name = "Notify when expired",
-		description = "Fire a notification as the thrall leaves.",
+		name = "Notify",
+		description = "Fire a notification when your resurrected thrall has expired.",
 		section = thrallSection,
 		position = 2
 	)
@@ -216,8 +252,8 @@ public interface RemindersConfig extends Config
 
 	@ConfigItem(
 		keyName = "thrallReminderOverlay",
-		name = "Show on-screen reminder",
-		description = "Keep a reminder on screen for as long as you are without a thrall.",
+		name = "Show in status panel",
+		description = "List this in the status panel once you have used it.",
 		section = thrallSection,
 		position = 3
 	)
@@ -229,7 +265,7 @@ public interface RemindersConfig extends Config
 	@ConfigItem(
 		keyName = "thrallOnlyInCombat",
 		name = "Only while fighting",
-		description = "Stay quiet unless you have dealt or taken damage recently.",
+		description = "Only notify and flash while you have dealt or taken damage recently.",
 		section = thrallSection,
 		position = 4
 	)
@@ -252,8 +288,7 @@ public interface RemindersConfig extends Config
 	@ConfigItem(
 		keyName = "vengeanceEnabled",
 		name = "Enable",
-		description = "Remind you once both the cooldown has run out and the cast you were"
-			+ " holding has rebounded.",
+		description = "Remind you when vengeance can be cast again.",
 		section = vengeanceSection,
 		position = 1
 	)
@@ -264,8 +299,8 @@ public interface RemindersConfig extends Config
 
 	@ConfigItem(
 		keyName = "vengeanceNotification",
-		name = "Notify when ready",
-		description = "Fire a notification as vengeance becomes castable again.",
+		name = "Notify",
+		description = "Fire a notification when vengeance can be cast again.",
 		section = vengeanceSection,
 		position = 2
 	)
@@ -276,8 +311,8 @@ public interface RemindersConfig extends Config
 
 	@ConfigItem(
 		keyName = "vengeanceReminderOverlay",
-		name = "Show on-screen reminder",
-		description = "Keep a reminder on screen for as long as vengeance is uncast.",
+		name = "Show in status panel",
+		description = "List this in the status panel once you have used it.",
 		section = vengeanceSection,
 		position = 3
 	)
@@ -289,8 +324,7 @@ public interface RemindersConfig extends Config
 	@ConfigItem(
 		keyName = "vengeanceOnlyInCombat",
 		name = "Only while fighting",
-		description = "Stay quiet unless you have dealt or taken damage recently. Turn this"
-			+ " off if you would rather be reminded before a fight starts than during it.",
+		description = "Only notify and flash while you have dealt or taken damage recently.",
 		section = vengeanceSection,
 		position = 4
 	)
@@ -313,7 +347,7 @@ public interface RemindersConfig extends Config
 	@ConfigItem(
 		keyName = "divineEnabled",
 		name = "Enable",
-		description = "Remind you when the last of a divine potion's boosts runs out.",
+		description = "Remind you when a divine potion's boost has worn off.",
 		section = divineSection,
 		position = 1
 	)
@@ -324,8 +358,8 @@ public interface RemindersConfig extends Config
 
 	@ConfigItem(
 		keyName = "divineNotification",
-		name = "Notify when worn off",
-		description = "Fire a notification as the boost ends.",
+		name = "Notify",
+		description = "Fire a notification when a divine potion's boost has worn off.",
 		section = divineSection,
 		position = 2
 	)
@@ -336,8 +370,8 @@ public interface RemindersConfig extends Config
 
 	@ConfigItem(
 		keyName = "divineReminderOverlay",
-		name = "Show on-screen reminder",
-		description = "Keep a reminder on screen for as long as you are without the boost.",
+		name = "Show in status panel",
+		description = "List this in the status panel once you have used it.",
 		section = divineSection,
 		position = 3
 	)
@@ -349,11 +383,365 @@ public interface RemindersConfig extends Config
 	@ConfigItem(
 		keyName = "divineOnlyInCombat",
 		name = "Only while fighting",
-		description = "Stay quiet unless you have dealt or taken damage recently.",
+		description = "Only notify and flash while you have dealt or taken damage recently.",
 		section = divineSection,
 		position = 4
 	)
 	default boolean divineOnlyInCombat()
+	{
+		return true;
+	}
+
+	// ------------------------------------------------------------------
+	// Death charge
+	// ------------------------------------------------------------------
+
+	@ConfigSection(
+		name = "Death charge",
+		description = "Reminds you when your death charge has expired.",
+		position = 50
+	)
+	String deathChargeSection = "deathChargeSection";
+
+	@ConfigItem(
+		keyName = "deathChargeEnabled",
+		name = "Enable",
+		description = "Remind you when your death charge has expired.",
+		section = deathChargeSection,
+		position = 1
+	)
+	default boolean deathChargeEnabled()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "deathChargeNotification",
+		name = "Notify",
+		description = "Fire a notification when your death charge has expired.",
+		section = deathChargeSection,
+		position = 2
+	)
+	default Notification deathChargeNotification()
+	{
+		return Notification.ON;
+	}
+
+	@ConfigItem(
+		keyName = "deathChargeReminderOverlay",
+		name = "Show in status panel",
+		description = "List this in the status panel once you have used it.",
+		section = deathChargeSection,
+		position = 3
+	)
+	default boolean deathChargeReminderOverlay()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "deathChargeOnlyInCombat",
+		name = "Only while fighting",
+		description = "Only notify and flash while you have dealt or taken damage recently.",
+		section = deathChargeSection,
+		position = 4
+	)
+	default boolean deathChargeOnlyInCombat()
+	{
+		return true;
+	}
+
+	// ------------------------------------------------------------------
+	// Shadow veil
+	// ------------------------------------------------------------------
+
+	@ConfigSection(
+		name = "Shadow veil",
+		description = "Reminds you when your shadow veil has expired.",
+		position = 60
+	)
+	String shadowVeilSection = "shadowVeilSection";
+
+	@ConfigItem(
+		keyName = "shadowVeilEnabled",
+		name = "Enable",
+		description = "Remind you when your shadow veil has expired.",
+		section = shadowVeilSection,
+		position = 1
+	)
+	default boolean shadowVeilEnabled()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "shadowVeilNotification",
+		name = "Notify",
+		description = "Fire a notification when your shadow veil has expired.",
+		section = shadowVeilSection,
+		position = 2
+	)
+	default Notification shadowVeilNotification()
+	{
+		return Notification.ON;
+	}
+
+	@ConfigItem(
+		keyName = "shadowVeilReminderOverlay",
+		name = "Show in status panel",
+		description = "List this in the status panel once you have used it.",
+		section = shadowVeilSection,
+		position = 3
+	)
+	default boolean shadowVeilReminderOverlay()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "shadowVeilOnlyInCombat",
+		name = "Only while fighting",
+		description = "Only notify and flash while you have dealt or taken damage recently.",
+		section = shadowVeilSection,
+		position = 4
+	)
+	default boolean shadowVeilOnlyInCombat()
+	{
+		return false;
+	}
+
+	// ------------------------------------------------------------------
+	// Antifire
+	// ------------------------------------------------------------------
+
+	@ConfigSection(
+		name = "Antifire",
+		description = "Reminds you when your antifire has run out.",
+		position = 70
+	)
+	String antifireSection = "antifireSection";
+
+	@ConfigItem(
+		keyName = "antifireEnabled",
+		name = "Enable",
+		description = "Remind you when your antifire has run out.",
+		section = antifireSection,
+		position = 1
+	)
+	default boolean antifireEnabled()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "antifireNotification",
+		name = "Notify",
+		description = "Fire a notification when your antifire has run out.",
+		section = antifireSection,
+		position = 2
+	)
+	default Notification antifireNotification()
+	{
+		return Notification.ON;
+	}
+
+	@ConfigItem(
+		keyName = "antifireReminderOverlay",
+		name = "Show in status panel",
+		description = "List this in the status panel once you have used it.",
+		section = antifireSection,
+		position = 3
+	)
+	default boolean antifireReminderOverlay()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "antifireOnlyInCombat",
+		name = "Only while fighting",
+		description = "Only notify and flash while you have dealt or taken damage recently.",
+		section = antifireSection,
+		position = 4
+	)
+	default boolean antifireOnlyInCombat()
+	{
+		return true;
+	}
+
+	// ------------------------------------------------------------------
+	// Stamina
+	// ------------------------------------------------------------------
+
+	@ConfigSection(
+		name = "Stamina",
+		description = "Reminds you when your stamina potion has run out.",
+		position = 80
+	)
+	String staminaSection = "staminaSection";
+
+	@ConfigItem(
+		keyName = "staminaEnabled",
+		name = "Enable",
+		description = "Remind you when your stamina potion has run out.",
+		section = staminaSection,
+		position = 1
+	)
+	default boolean staminaEnabled()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "staminaNotification",
+		name = "Notify",
+		description = "Fire a notification when your stamina potion has run out.",
+		section = staminaSection,
+		position = 2
+	)
+	default Notification staminaNotification()
+	{
+		return Notification.ON;
+	}
+
+	@ConfigItem(
+		keyName = "staminaReminderOverlay",
+		name = "Show in status panel",
+		description = "List this in the status panel once you have used it.",
+		section = staminaSection,
+		position = 3
+	)
+	default boolean staminaReminderOverlay()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "staminaOnlyInCombat",
+		name = "Only while fighting",
+		description = "Only notify and flash while you have dealt or taken damage recently.",
+		section = staminaSection,
+		position = 4
+	)
+	default boolean staminaOnlyInCombat()
+	{
+		return false;
+	}
+
+	// ------------------------------------------------------------------
+	// Magic imbue
+	// ------------------------------------------------------------------
+
+	@ConfigSection(
+		name = "Magic imbue",
+		description = "Reminds you when your magic imbue has run out.",
+		position = 90
+	)
+	String magicImbueSection = "magicImbueSection";
+
+	@ConfigItem(
+		keyName = "magicImbueEnabled",
+		name = "Enable",
+		description = "Remind you when your magic imbue has run out.",
+		section = magicImbueSection,
+		position = 1
+	)
+	default boolean magicImbueEnabled()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "magicImbueNotification",
+		name = "Notify",
+		description = "Fire a notification when your magic imbue has run out.",
+		section = magicImbueSection,
+		position = 2
+	)
+	default Notification magicImbueNotification()
+	{
+		return Notification.ON;
+	}
+
+	@ConfigItem(
+		keyName = "magicImbueReminderOverlay",
+		name = "Show in status panel",
+		description = "List this in the status panel once you have used it.",
+		section = magicImbueSection,
+		position = 3
+	)
+	default boolean magicImbueReminderOverlay()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "magicImbueOnlyInCombat",
+		name = "Only while fighting",
+		description = "Only notify and flash while you have dealt or taken damage recently.",
+		section = magicImbueSection,
+		position = 4
+	)
+	default boolean magicImbueOnlyInCombat()
+	{
+		return false;
+	}
+
+	// ------------------------------------------------------------------
+	// Menaphite remedy
+	// ------------------------------------------------------------------
+
+	@ConfigSection(
+		name = "Menaphite remedy",
+		description = "Reminds you when your menaphite remedy has worn off.",
+		position = 100
+	)
+	String menaphiteRemedySection = "menaphiteRemedySection";
+
+	@ConfigItem(
+		keyName = "menaphiteRemedyEnabled",
+		name = "Enable",
+		description = "Remind you when your menaphite remedy has worn off.",
+		section = menaphiteRemedySection,
+		position = 1
+	)
+	default boolean menaphiteRemedyEnabled()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "menaphiteRemedyNotification",
+		name = "Notify",
+		description = "Fire a notification when your menaphite remedy has worn off.",
+		section = menaphiteRemedySection,
+		position = 2
+	)
+	default Notification menaphiteRemedyNotification()
+	{
+		return Notification.ON;
+	}
+
+	@ConfigItem(
+		keyName = "menaphiteRemedyReminderOverlay",
+		name = "Show in status panel",
+		description = "List this in the status panel once you have used it.",
+		section = menaphiteRemedySection,
+		position = 3
+	)
+	default boolean menaphiteRemedyReminderOverlay()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "menaphiteRemedyOnlyInCombat",
+		name = "Only while fighting",
+		description = "Only notify and flash while you have dealt or taken damage recently.",
+		section = menaphiteRemedySection,
+		position = 4
+	)
+	default boolean menaphiteRemedyOnlyInCombat()
 	{
 		return true;
 	}

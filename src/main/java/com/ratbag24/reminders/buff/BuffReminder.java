@@ -2,7 +2,6 @@ package com.ratbag24.reminders.buff;
 
 import com.ratbag24.reminders.Reminder;
 import com.ratbag24.reminders.ReminderContext;
-import javax.annotation.Nullable;
 import net.runelite.api.events.VarbitChanged;
 
 /**
@@ -93,11 +92,17 @@ public class BuffReminder implements Reminder
 		return state.hasBeenActive() && conditionsMet();
 	}
 
-	@Nullable
 	@Override
-	public String getReminderText()
+	public boolean isRelevant()
 	{
-		return isNudging() && settings.isShowReminder() ? definition.getReminderText() : null;
+		return isEnabled() && settings.isShowReminder() && state.isSynced()
+			&& state.hasBeenActive();
+	}
+
+	@Override
+	public boolean isUp()
+	{
+		return state.isActive();
 	}
 
 	private boolean conditionsMet()

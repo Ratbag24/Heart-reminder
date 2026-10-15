@@ -103,6 +103,42 @@ public class RemindersPlugin extends Plugin
 			config::divineReminderOverlay,
 			config::divineOnlyInCombat)));
 
+		reminders.add(new BuffReminder(reminderContext, Buffs.DEATH_CHARGE, new BuffSettings(
+			config::deathChargeEnabled,
+			config::deathChargeNotification,
+			config::deathChargeReminderOverlay,
+			config::deathChargeOnlyInCombat)));
+
+		reminders.add(new BuffReminder(reminderContext, Buffs.SHADOW_VEIL, new BuffSettings(
+			config::shadowVeilEnabled,
+			config::shadowVeilNotification,
+			config::shadowVeilReminderOverlay,
+			config::shadowVeilOnlyInCombat)));
+
+		reminders.add(new BuffReminder(reminderContext, Buffs.ANTIFIRE, new BuffSettings(
+			config::antifireEnabled,
+			config::antifireNotification,
+			config::antifireReminderOverlay,
+			config::antifireOnlyInCombat)));
+
+		reminders.add(new BuffReminder(reminderContext, Buffs.STAMINA, new BuffSettings(
+			config::staminaEnabled,
+			config::staminaNotification,
+			config::staminaReminderOverlay,
+			config::staminaOnlyInCombat)));
+
+		reminders.add(new BuffReminder(reminderContext, Buffs.MAGIC_IMBUE, new BuffSettings(
+			config::magicImbueEnabled,
+			config::magicImbueNotification,
+			config::magicImbueReminderOverlay,
+			config::magicImbueOnlyInCombat)));
+
+		reminders.add(new BuffReminder(reminderContext, Buffs.MENAPHITE_REMEDY, new BuffSettings(
+			config::menaphiteRemedyEnabled,
+			config::menaphiteRemedyNotification,
+			config::menaphiteRemedyReminderOverlay,
+			config::menaphiteRemedyOnlyInCombat)));
+
 		for (Reminder reminder : reminders)
 		{
 			reminder.startUp(this);
@@ -214,28 +250,11 @@ public class RemindersPlugin extends Plugin
 	}
 
 	/**
-	 * What the enabled reminders want shown on screen, in registration order.
-	 * Read by the overlay on the client thread while it renders.
+	 * The registered reminders, in registration order. Read by the status
+	 * panel on the client thread while it renders.
 	 */
-	List<String> getActiveReminderTexts()
+	List<Reminder> getReminders()
 	{
-		List<String> texts = null;
-
-		for (Reminder reminder : reminders)
-		{
-			final String text = reminder.getReminderText();
-
-			if (text != null)
-			{
-				if (texts == null)
-				{
-					texts = new ArrayList<>(reminders.size());
-				}
-
-				texts.add(text);
-			}
-		}
-
-		return texts == null ? Collections.emptyList() : texts;
+		return Collections.unmodifiableList(reminders);
 	}
 }

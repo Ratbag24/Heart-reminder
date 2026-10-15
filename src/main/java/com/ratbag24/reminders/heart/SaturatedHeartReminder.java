@@ -4,7 +4,6 @@ import com.ratbag24.reminders.Reminder;
 import com.ratbag24.reminders.ReminderContext;
 import com.ratbag24.reminders.RemindersConfig;
 import java.util.Locale;
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.runelite.api.ItemContainer;
@@ -47,12 +46,6 @@ public class SaturatedHeartReminder implements Reminder
 	private Plugin plugin;
 	private HeartInfoBox infoBox;
 	private int infoBoxItemId;
-
-	@Override
-	public String getName()
-	{
-		return "Saturated heart";
-	}
 
 	@Override
 	public boolean isEnabled()
@@ -152,13 +145,31 @@ public class SaturatedHeartReminder implements Reminder
 		return isTracked() && conditionsMet();
 	}
 
-	@Nullable
 	@Override
-	public String getReminderText()
+	public String getName()
 	{
-		return isNudging() && config.heartReminderOverlay()
-			? cooldown.getType().getDisplayName() + " ready"
-			: null;
+		return cooldown.getType().getDisplayName();
+	}
+
+	@Override
+	public boolean isRelevant()
+	{
+		if (!isEnabled() || !config.heartReminderOverlay() || !cooldown.isSynced() || !isTracked())
+		{
+			return false;
+		}
+
+		return !config.heartRequireInInventory() || carryingHeart();
+	}
+
+	/**
+	 * The heart's boost and its cooldown run out together, so a heart still on
+	 * cooldown is a heart whose boost is still running: up, and nothing to do.
+	 */
+	@Override
+	public boolean isUp()
+	{
+		return cooldown.isOnCooldown();
 	}
 
 	/**

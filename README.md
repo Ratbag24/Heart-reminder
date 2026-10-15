@@ -1,117 +1,89 @@
 # All-in-One Reminders
 
-A RuneLite plugin for the "don't forget to re-apply that" reminders, with a
-switch for each one so they live in a single plugin instead of a dozen.
+A RuneLite plugin for the buffs you have to keep re-applying. One movable panel
+shows what you are using, green while it is up and red once it needs doing
+again, with a toggle for every reminder.
 
-Four reminders so far: the **saturated heart**, **thralls**, **vengeance** and
-**divine potions**.
+## The panel
 
-## How a reminder behaves
+Drag it anywhere on screen. It lists only what you actually use — a buff you
+have not applied since logging in gets no line — so it fills itself in rather
+than showing you ten things you never touch.
 
-Every reminder works the same way, because missing a notification should not be
-the end of it:
+```
+Reminders
+Saturated heart      UP
+Thrall             DOWN
+Death charge         UP
+```
 
-- A **notification** the moment the thing runs out, in whatever form you have
-  set up in RuneLite's own notification settings.
-- An **on-screen reminder** that stays up for as long as the buff is missing,
-  listed in one shared panel rather than a box each.
-- A **visual**: a coloured glow throbs around the edge of the game view while
-  anything is asking for attention, and the heart itself throbs in your
-  inventory while it is ready to invigorate.
-- **Only while fighting**, on by default, so nothing follows you round the bank.
-  Combat means having dealt or taken damage in the last ten seconds.
+Each line says `UP` or `DOWN` as well as being coloured. Red and green are the
+worst pair to tell apart for the commonest kind of colour blindness, so the
+colour is never the only thing carrying the meaning. Both colours are
+configurable, and the panel can be set to show everything, only what is down, or
+nothing at all.
 
-Nothing is said about a buff you have not used since logging in. Not having
-cast vengeance is the normal state for most of the game, so the reminder only
-starts caring once you have shown you want it by casting it once.
+## What it tracks
 
-## The reminders
+| Reminder | Notes |
+| --- | --- |
+| Saturated / imbued heart | Plus a cooldown timer, and the heart lights up in your inventory |
+| Thrall | |
+| Vengeance | Ready once the cooldown ends *and* the held cast has rebounded |
+| Divine potions | All eight varbits together, so one potion reminds once |
+| Death charge | |
+| Shadow veil | |
+| Antifire | Plain and super together |
+| Stamina | |
+| Magic imbue | |
+| Menaphite remedy | |
 
-### Saturated heart
+**Ward of Arceuus and Mark of Darkness are not here.** The game gives them no
+varbit while they are up, so RuneLite's own timers work them out from a chat
+message and a duration. That is a different mechanism from everything above, and
+guessing at it would be worse than leaving them out.
 
-The saturated heart boosts Magic by 4 + 10% of your level for five minutes and
-cannot be used again until those five minutes are up. The imbued heart it is
-upgraded from gives 1 + 10% on a seven minute cooldown. Both count down the
-*same* varbit, so one reminder covers either, and the plugin tells them apart by
-how long the cooldown started out.
+## The rest of it
 
-On top of the shared behaviour it adds a countdown infobox that turns green for
-the last 30 seconds, an option to only track the saturated heart, and an option
-to stay quiet unless a heart is actually in your inventory.
+- A **notification** when something runs out, in whatever form you have set up in
+  RuneLite's own notification settings.
+- A **screen edge glow** that throbs while anything needs attention. It sits at
+  the edge rather than washing the view — the middle of the screen is where the
+  fight is.
+- The **heart lights up in your inventory** until you use it.
+- **Only while fighting**, on by default for the combat buffs, so notifications
+  and the flash stay quiet at the bank. The panel is not combat-gated: it is
+  information, not a nag.
 
-### Thrall
-
-A thrall lasts one tick per Magic level, doubled at Grandmaster combat
-achievement tier. Its varbit drops to zero the moment it leaves, which is when
-the reminder fires.
-
-### Vengeance
-
-Vengeance can only be re-cast once two things are true: the cooldown has run
-out, *and* the cast you were holding has rebounded. Both are watched, so the
-reminder waits for whichever happens second rather than firing early.
-
-Its "only while fighting" default means you hear about it mid-fight. Turn that
-off if you would rather be reminded before a fight starts.
-
-### Divine potions
-
-One divine potion sets its own timer and one per stat it boosts, so all eight
-divine varbits are watched together and the reminder fires when the last of them
-reaches zero. Reminding as each stat timer ran out would fire four times for one
-divine super combat potion.
-
-## Settings
-
-A **General** section holds the settings shared by everything: *Send chat
-messages* (off by default), *Flash the screen edge* (on), and the *Flash colour*
-used by both the screen edge and the item highlight.
-
-The pulse is a slow sine rather than a blink — one cycle every 1.4 seconds. A
-hard on/off flash at a few hertz is harder to ignore for everyone and a real
-problem for photosensitive players; this reads as "look here" without strobing.
-Turning the colour's alpha down makes it subtler, and the toggle turns it off.
-
-Every reminder then gets a section with *Enable*, *Notify*, *Show on-screen
-reminder* and *Only while fighting*. The saturated heart adds three of its own:
-
-| Setting | Default | What it does |
-| --- | --- | --- |
-| Hearts to track | Imbued and saturated | Restrict it to the saturated heart's shorter cooldown if you have both. |
-| Show cooldown timer | on | Infobox counting the cooldown down. |
-| Flash the heart in your inventory | on | Throb the heart itself while it is ready, so the thing to click is lit up. |
-| Only when carrying one | on | Stay quiet when no heart is in your inventory. |
+The pulse is a slow sine, one cycle every 1.4 seconds, rather than a blink. A
+hard flash at a few hertz is harder to ignore for everyone and a real problem for
+photosensitive players.
 
 ## How the game state is read
 
-Everything is driven by varbits rather than by a stopwatch, so a death, a world
-hop or a logout cannot leave a reminder out of step with the game. For every
-reminder, the first values read after a login are *adopted* rather than treated
-as a change — that is what stops a reminder firing every time you log in.
+Everything is driven by varbits rather than a stopwatch, so dying, hopping or
+logging out cannot knock a reminder out of step. The first values read after a
+login are *adopted* rather than treated as a change, which is what stops a
+reminder firing every time you log in.
 
-**The heart** uses `VarbitID.IMBUED_HEART_TIMER` (varbit 5361), the same varbit
-RuneLite's own Timers plugin uses for its "Imbued/Saturated heart" timer. It
-holds the remaining cooldown in steps of ten game ticks, which gives two things:
+**The heart** uses `VarbitID.IMBUED_HEART_TIMER` (5361), which both hearts count
+down in steps of ten game ticks. The step to zero is the "recharged" event; a
+wall-clock estimate re-synced on every step drives the display countdown so it
+moves once a second rather than in six second jumps, capped by the varbit so it
+never reads ready early. Which heart it is comes from the length the cooldown
+started at — 50 steps for the saturated heart's five minutes, 70 for the imbued
+heart's seven. A cooldown already running at login stays unidentified rather than
+guessed, and the panel just says "Heart".
 
-- **The event.** The step down to zero is the authoritative "it has recharged"
-  moment.
-- **The countdown.** Ten ticks is six seconds, so the varbit alone would tick
-  down in six second jumps. A wall-clock estimate, re-synchronised every time
-  the varbit moves, drives the display instead, and is capped by the varbit so
-  it can never claim the heart is ready before the game does.
+Its boost and its cooldown run out together, so a heart still on cooldown counts
+as **up**: the thing you would re-apply is still working.
 
-Which heart is on cooldown comes from the length it started at: 50 steps is five
-minutes (saturated), 70 is seven (imbued). When the cooldown was already running
-at login, neither can be ruled out, and the heart stays unidentified rather than
-guessed at — the reminder still fires, it just says "Heart" instead of naming it.
-The game's own `SATURATED_HEART_TIME` varbit is watched as a second opinion, and
-will name a heart the cooldown length could not.
-
-**Everything else** is a buff that is either there or not, reported through one
-or more varbits that are non-zero while any part of it is running. That one
-shape covers thralls, vengeance and divine potions alike, so they share an
-implementation: the buff counts as gone once *every* one of its varbits has
-reached zero.
+**Everything else** is reported through varbits that are non-zero while any part
+of the buff is running, so one implementation covers them all: the buff is gone
+once *every* one of its varbits reaches zero. That matters in both directions —
+vengeance needs both its cooldown and its rebound varbit clear, and a divine
+potion sets its own timer plus one per stat, so watching all eight is what stops
+one potion reminding four times.
 
 ## Building and running
 
@@ -122,30 +94,20 @@ Requires JDK 11 or newer.
 ./gradlew run      # start RuneLite with this plugin loaded
 ```
 
-`./gradlew run` launches a developer-mode client, which is how to try the plugin
-before it is anywhere near the Plugin Hub. Every push also builds and tests
-against `net.runelite:client` on GitHub Actions.
+Every push also builds and tests against `net.runelite:client` on GitHub Actions.
 
 ## Adding another reminder
 
-For anything that is a buff reported by varbits — most of them — there is no new
-class to write:
+For anything reported by varbits there is no new class to write:
 
-1. Add a `BuffDefinition` to `Buffs`: its name, the message for the
-   notification, the line for the on-screen panel, and the varbits that are
-   non-zero while it lasts.
+1. Add a `BuffDefinition` to `Buffs`: its name, the notification message, and the
+   varbits that are non-zero while it lasts.
 2. Add a `@ConfigSection` for it in `RemindersConfig` with the usual four
-   settings. Sections are positioned in tens so there is room to slot one in.
+   settings. Sections go up in tens so there is room to slot one in.
 3. Register it in `RemindersPlugin.startUp()`.
 
-Anything that needs more than "is it there or not" — a countdown, a cooldown, an
-item to check for — implements `Reminder` directly, as the heart does. Only
-`getName()`, `isEnabled()` and the events it cares about need filling in;
-`getReminderText()` returns what the overlay should say, or `null` for nothing.
-
-`RemindersPlugin` subscribes to the client's events once and fans them out, so a
-new reminder never touches the event plumbing. `ReminderContext` hands every
-reminder the client, notifications and the shared combat tracker.
+Anything needing more than "is it there or not" — a countdown, a cooldown, an
+item to check for — implements `Reminder` directly, as the heart does.
 
 ## Layout
 
@@ -153,12 +115,13 @@ reminder the client, notifications and the shared combat tracker.
 src/main/java/com/ratbag24/reminders/
   RemindersPlugin.java        event plumbing and the reminder registry
   RemindersConfig.java        one @ConfigSection per reminder
-  RemindersOverlay.java       the shared on-screen panel
+  RemindersOverlay.java       the movable status panel
+  PanelMode.java              how much that panel shows
   Reminder.java               what a reminder has to implement
   ReminderContext.java        services every reminder needs
   CombatTracker.java          shared "was I fighting recently" state
   buff/
-    Buffs.java                    the buff definitions: thrall, vengeance, divine
+    Buffs.java                    the nine buff definitions
     BuffDefinition.java           one buff as data
     BuffSettings.java             one buff's settings, read live
     BuffReminder.java             the reminder shared by every buff
@@ -175,10 +138,8 @@ src/main/java/com/ratbag24/reminders/
     HeartInfoBox.java             the countdown infobox
 ```
 
-`HeartCooldown`, `BuffState` and `Pulse` deliberately have no RuneLite imports: the
-timing rules are the part most likely to be subtly wrong, so they are kept
-testable on their own. Between them `HeartCooldownTest`, `BuffStateTest` and
-`PulseTest` cover the login sync, the death reset, early re-use, heart
-identification, the display countdown, vengeance's two varbits, one divine
-potion reminding once rather than four times, and the pulse curve staying in
-bounds and meeting itself smoothly at the seam.
+`HeartCooldown`, `BuffState` and `Pulse` deliberately have no RuneLite imports:
+the timing rules are the part most likely to be subtly wrong, so they are kept
+testable on their own. Fifty tests cover the login sync, the death reset, early
+re-use, heart identification, the display countdown, vengeance's two varbits, one
+divine potion reminding once rather than four times, and the pulse curve.

@@ -12,22 +12,18 @@ public final class BuffDefinition
 {
 	private final String name;
 	private final String notificationMessage;
-	private final String reminderText;
 	private final int[] varbits;
 
 	/**
-	 * @param name                 the buff's name, used for the config and logs
+	 * @param name                 the buff's name, shown in the status panel
 	 * @param notificationMessage  the one-off message sent as it runs out
-	 * @param reminderText         the line shown for as long as it is missing
 	 * @param varbits              every varbit that is non-zero while any part
 	 *                             of the buff is still running
 	 */
-	public BuffDefinition(String name, String notificationMessage, String reminderText,
-		int... varbits)
+	public BuffDefinition(String name, String notificationMessage, int... varbits)
 	{
 		this.name = name;
 		this.notificationMessage = notificationMessage;
-		this.reminderText = reminderText;
 		this.varbits = varbits.clone();
 	}
 
@@ -39,11 +35,6 @@ public final class BuffDefinition
 	public String getNotificationMessage()
 	{
 		return notificationMessage;
-	}
-
-	public String getReminderText()
-	{
-		return reminderText;
 	}
 
 	public int[] getVarbits()

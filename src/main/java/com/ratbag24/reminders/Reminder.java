@@ -1,6 +1,5 @@
 package com.ratbag24.reminders;
 
-import javax.annotation.Nullable;
 import net.runelite.api.events.ItemContainerChanged;
 import net.runelite.api.events.VarbitChanged;
 import net.runelite.client.plugins.Plugin;
@@ -60,8 +59,8 @@ public interface Reminder
 	 * Whether this reminder wants the player's attention right now, whatever
 	 * form that attention takes.
 	 * <p>
-	 * Kept separate from {@link #getReminderText()} so that the visuals and the
-	 * text panel can be switched on and off independently: someone who wants
+	 * Kept separate from {@link #isRelevant()} so that the visuals and the
+	 * status panel can be switched on and off independently: someone who wants
 	 * only a flashing screen edge should still get one.
 	 */
 	default boolean isNudging()
@@ -70,12 +69,22 @@ public interface Reminder
 	}
 
 	/**
-	 * What to show on the reminder overlay right now, or null when this
-	 * reminder has nothing to say.
+	 * Whether this reminder is worth a line in the status panel: the player
+	 * uses this buff and has it switched on. A buff nobody has applied since
+	 * logging in is not listed, so the panel fills itself with what you
+	 * actually use rather than everything the plugin knows about.
 	 */
-	@Nullable
-	default String getReminderText()
+	default boolean isRelevant()
 	{
-		return null;
+		return false;
+	}
+
+	/**
+	 * Whether the thing being tracked is currently up, which is what decides
+	 * the colour of its line.
+	 */
+	default boolean isUp()
+	{
+		return false;
 	}
 }
