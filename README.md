@@ -16,8 +16,9 @@ Twelve buffs, each switchable on its own.
   so it waits for whichever happens second
 - **Divine potions** — all eight varbits watched together, so one potion reminds
   once rather than four times
-- **Death charge** — spent by a kill rather than by running down, so the
-  reminder waits out the spell's minute of cooldown before asking again
+- **Death charge** — spent on kills rather than by running down (one, or two
+  with the Book of the Dead), so the reminder waits out the spell's minute of
+  cooldown before asking again
 - **Shadow veil** — for thieving, so it is not combat-gated by default; its
   cooldown is watched too
 - **Antifire** — plain and super watched together, so a super running out under

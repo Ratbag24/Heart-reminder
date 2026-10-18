@@ -172,19 +172,22 @@ public class BuffStateTest
 	@Test
 	public void aChargeSpentOnAKillSaysNothingWhileTheSpellIsStillOnCooldown()
 	{
-		// Reported from a live game: death charge is spent by a kill rather than
+		// Reported from a live game: death charge is spent on kills rather than
 		// by running down, and the spell then sits on a minute's cooldown. The
-		// charge going to zero is not the moment to ask for another one.
+		// last charge going is not the moment to ask for another cast.
 		final int ACTIVE = 12411;
 		final int COOLDOWN = 12138;
 		BuffState deathCharge = new BuffState(ACTIVE, COOLDOWN);
 		deathCharge.sync(new int[]{0, 0});
 
-		// Cast it: charged, and the spell goes on cooldown.
-		assertEquals(Transition.ACTIVE, deathCharge.onVarbitValue(ACTIVE, 1));
+		// Cast it with the Book of the Dead: two charges, and on cooldown.
+		assertEquals(Transition.ACTIVE, deathCharge.onVarbitValue(ACTIVE, 2));
 		assertEquals(Transition.NONE, deathCharge.onVarbitValue(COOLDOWN, 1));
 
-		// A kill spends the charge, but it still cannot be re-cast.
+		// Kills spend the charges, but the spell still cannot be re-cast. How
+		// many a cast carries makes no difference: one charge or two behave the
+		// same, because the varbit is non-zero while any remain.
+		assertEquals(Transition.NONE, deathCharge.onVarbitValue(ACTIVE, 1));
 		assertEquals(Transition.NONE, deathCharge.onVarbitValue(ACTIVE, 0));
 		assertTrue(deathCharge.isActive());
 

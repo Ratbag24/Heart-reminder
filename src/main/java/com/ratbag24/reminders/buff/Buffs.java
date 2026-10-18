@@ -62,11 +62,15 @@ public final class Buffs
 		VarbitID.DIVINEBATTLEMAGE_POTION_TIME);
 
 	/**
-	 * Death charge is spent on a kill rather than running down a clock, and the
-	 * spell then sits on a minute's cooldown regardless. Watching the charge
-	 * alone announced "you need to death charge" the moment a kill used it up,
-	 * a minute before it could actually be cast; the cooldown is watched with
-	 * it so the reminder waits until the spell is available.
+	 * Death charge is spent on kills rather than by running down a clock — one
+	 * kill, or two with the Book of the Dead — and the spell then sits on a
+	 * minute's cooldown regardless.
+	 * <p>
+	 * Watching the charge alone announced "you need to death charge" the moment
+	 * the last charge was used, a minute before it could actually be cast. The
+	 * cooldown is watched with it, so the reminder waits until the spell is
+	 * available. How many charges a cast carries makes no difference here: the
+	 * varbit is non-zero while any remain, so one charge or two behave the same.
 	 */
 	public static final BuffDefinition DEATH_CHARGE = new BuffDefinition(
 		"Your death charge is ready to cast again.",
