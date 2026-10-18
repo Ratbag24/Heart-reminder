@@ -21,7 +21,6 @@ public class BuffReminder implements Reminder
 	private final BuffDefinition definition;
 	private final BuffSettings settings;
 	private final BuffState state;
-	private final CastProof castProof;
 
 	public BuffReminder(ReminderContext ctx, BuffDefinition definition, BuffSettings settings)
 	{
@@ -29,7 +28,6 @@ public class BuffReminder implements Reminder
 		this.definition = definition;
 		this.settings = settings;
 		this.state = new BuffState(definition.getVarbits());
-		this.castProof = new CastProof(definition.getCooldownVarbit());
 	}
 
 	@Override
@@ -42,7 +40,6 @@ public class BuffReminder implements Reminder
 	public void reset()
 	{
 		state.reset();
-		castProof.reset();
 	}
 
 	@Override
@@ -50,13 +47,10 @@ public class BuffReminder implements Reminder
 	{
 		// The buff is tracked even while its reminder is switched off, so that
 		// switching it on does not need a re-login to read right.
-		castProof.onVarbitValue(event.getVarbitId(), event.getValue());
-
 		final BuffState.Transition transition =
 			state.onVarbitValue(event.getVarbitId(), event.getValue());
 
-		if (transition == BuffState.Transition.EXPIRED && isEnabled() && conditionsMet()
-			&& castProof.isProven())
+		if (transition == BuffState.Transition.EXPIRED && isEnabled() && conditionsMet())
 		{
 			ctx.announce(settings.getNotification(), definition.getNotificationMessage());
 		}
@@ -75,10 +69,6 @@ public class BuffReminder implements Reminder
 			for (int i = 0; i < varbits.length; i++)
 			{
 				values[i] = ctx.getClient().getVarbitValue(varbits[i]);
-
-				// Logging in partway through your own cooldown still proves the
-				// cast was yours.
-				castProof.onVarbitValue(varbits[i], values[i]);
 			}
 
 			state.sync(values);
@@ -95,15 +85,7 @@ public class BuffReminder implements Reminder
 
 		// Nothing is said to a player who has not had this buff up at all: not
 		// having cast vengeance is the normal state for most of the game.
-		if (!state.hasBeenActive() || !conditionsMet())
-		{
-			return false;
-		}
-
-		// And nothing about a buff somebody else put on you. A teammate's
-		// Vengeance Other leaves you vengeance-marked without a cooldown of
-		// your own, often on a spellbook with no vengeance to cast.
-		return castProof.isProven();
+		return state.hasBeenActive() && conditionsMet();
 	}
 
 	@Nullable
