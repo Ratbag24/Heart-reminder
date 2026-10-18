@@ -3,7 +3,6 @@ package com.ratbag24.reminders.buff;
 import com.ratbag24.reminders.Alert;
 import com.ratbag24.reminders.Reminder;
 import com.ratbag24.reminders.ReminderContext;
-import com.ratbag24.reminders.SpellbookLock;
 import javax.annotation.Nullable;
 import net.runelite.api.events.VarbitChanged;
 
@@ -22,7 +21,7 @@ public class BuffReminder implements Reminder
 	private final BuffDefinition definition;
 	private final BuffSettings settings;
 	private final BuffState state;
-	private final SpellbookLock spellbook = new SpellbookLock();
+	private final CastProof castProof;
 
 	public BuffReminder(ReminderContext ctx, BuffDefinition definition, BuffSettings settings)
 	{
@@ -30,6 +29,7 @@ public class BuffReminder implements Reminder
 		this.definition = definition;
 		this.settings = settings;
 		this.state = new BuffState(definition.getVarbits());
+		this.castProof = new CastProof(definition.getCooldownVarbit());
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class BuffReminder implements Reminder
 	public void reset()
 	{
 		state.reset();
-		spellbook.reset();
+		castProof.reset();
 	}
 
 	@Override
@@ -50,17 +50,13 @@ public class BuffReminder implements Reminder
 	{
 		// The buff is tracked even while its reminder is switched off, so that
 		// switching it on does not need a re-login to read right.
+		castProof.onVarbitValue(event.getVarbitId(), event.getValue());
+
 		final BuffState.Transition transition =
 			state.onVarbitValue(event.getVarbitId(), event.getValue());
 
-		if (transition == BuffState.Transition.ACTIVE && definition.isSpell())
-		{
-			// Casting it proves which spellbook it lives on, whatever the game
-			// numbers that book as.
-			spellbook.learn(ctx.getSpellbook());
-		}
-
-		if (transition == BuffState.Transition.EXPIRED && isEnabled() && conditionsMet())
+		if (transition == BuffState.Transition.EXPIRED && isEnabled() && conditionsMet()
+			&& castProof.isProven())
 		{
 			ctx.announce(settings.getNotification(), definition.getNotificationMessage());
 		}
@@ -79,6 +75,10 @@ public class BuffReminder implements Reminder
 			for (int i = 0; i < varbits.length; i++)
 			{
 				values[i] = ctx.getClient().getVarbitValue(varbits[i]);
+
+				// Logging in partway through your own cooldown still proves the
+				// cast was yours.
+				castProof.onVarbitValue(varbits[i], values[i]);
 			}
 
 			state.sync(values);
@@ -100,9 +100,10 @@ public class BuffReminder implements Reminder
 			return false;
 		}
 
-		// And nothing about a spell from a book you are not on: asking for a
-		// thrall while on the standard spellbook is noise, not a reminder.
-		return spellbook.allows(ctx.getSpellbook());
+		// And nothing about a buff somebody else put on you. A teammate's
+		// Vengeance Other leaves you vengeance-marked without a cooldown of
+		// your own, often on a spellbook with no vengeance to cast.
+		return castProof.isProven();
 	}
 
 	@Nullable

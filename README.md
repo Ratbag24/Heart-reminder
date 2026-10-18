@@ -81,9 +81,8 @@ you want it by casting it once.
 - The **heart lights up in your inventory** until you use it.
 - **Only while fighting**, on by default for the combat buffs, so nothing
   follows you round the bank.
-- **Only on the right spellbook.** A spell's reminder goes quiet while you are
-  on a book it cannot be cast from, so switching to standard for other content
-  does not mean switching reminders off and on again.
+- **Only for your own casts.** A buff a teammate put on you never turns into a
+  reminder to re-cast it yourself.
 
 The pulse is a slow sine, one cycle every 1.4 seconds, rather than a blink. A
 hard flash at a few hertz is harder to ignore for everyone and a real problem for
@@ -127,13 +126,20 @@ guessed, and the panel just says "Heart".
 Its boost and its cooldown run out together, so a heart still on cooldown counts
 as **up**: the thing you would re-apply is still working.
 
-**Which spellbook you are on** is read from a varbit, but what its values mean
-is game data rather than anything fixed — RuneLite reads it as an index into one
-of the game's own enums rather than hardcoding "three means Arceuus". So nothing
-is assumed here either. A thrall can only be summoned from Arceuus, so the
-spellbook you are on when one appears *is* Arceuus, whatever number the game
-gives it; that value is recorded on the first cast and compared from then on. It
-cannot be wrong, because it was observed rather than guessed.
+**Whose buff it is** cannot be read from the buff itself. A varbit says the buff
+is on you; it does not say who put it there. Vengeance Other is the awkward case
+— a teammate casting it marks you while you may be on a spellbook with no
+vengeance to cast, and a reminder that followed would be asking for something
+impossible.
+
+What separates the two is the cooldown. Casting a spell starts its cooldown on
+*the caster*, so seeing your own cooldown begin is proof the cast was yours;
+receiving the buff from someone else never starts it. A spell is only ever
+reminded about once that has been seen, and the proof lasts the session — having
+cast it once is what makes the reminder wanted, and the cooldown since running
+down does not take that back. Buffs with no cooldown varbit are taken at face
+value: those are potions and items, and self-cast spells like magic imbue, none
+of which anyone else can apply to you.
 
 **Everything else** is reported through varbits that are non-zero while any part
 of the buff is running, so one implementation covers them all: the buff is gone

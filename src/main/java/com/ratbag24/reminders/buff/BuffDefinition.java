@@ -1,5 +1,7 @@
 package com.ratbag24.reminders.buff;
 
+import java.util.Arrays;
+
 /**
  * Everything that distinguishes one buff reminder from another: what it is
  * called, what to say about it, and which varbits report it.
@@ -12,28 +14,38 @@ public final class BuffDefinition
 {
 	private final String notificationMessage;
 	private final String alertText;
-	private final boolean spell;
+	private final int cooldownVarbit;
 	private final int[] varbits;
 
 	/**
-	 * @param notificationMessage  the one-off message sent as it runs out
-	 * @param alertText            the banner's wording, phrased as the thing to
-	 *                             do rather than the state you are in
-	 * @param varbits              every varbit that is non-zero while any part
-	 *                             of the buff is still running
+	 * @param notificationMessage the one-off message sent as it runs out
+	 * @param alertText           the banner's wording, phrased as the thing to
+	 *                            do rather than the state you are in
+	 * @param cooldownVarbit      the varbit the game runs down after a cast,
+	 *                            which is what proves the cast was the player's
+	 *                            own; {@link CastProof#NO_COOLDOWN} where the
+	 *                            game keeps no such varbit. It is watched along
+	 *                            with the rest, since a buff is not finished
+	 *                            with while its spell is still unavailable.
+	 * @param varbits             every other varbit that is non-zero while any
+	 *                            part of the buff is still running
 	 */
-	/**
-	 * @param spell  true for something cast from a spellbook, so its reminder
-	 *               can tie itself to the book it was cast from; false for a
-	 *               potion or an item, which work wherever you are
-	 */
-	public BuffDefinition(String notificationMessage, String alertText, boolean spell,
+	public BuffDefinition(String notificationMessage, String alertText, int cooldownVarbit,
 		int... varbits)
 	{
 		this.notificationMessage = notificationMessage;
 		this.alertText = alertText;
-		this.spell = spell;
-		this.varbits = varbits.clone();
+		this.cooldownVarbit = cooldownVarbit;
+
+		if (cooldownVarbit == CastProof.NO_COOLDOWN)
+		{
+			this.varbits = varbits.clone();
+		}
+		else
+		{
+			this.varbits = Arrays.copyOf(varbits, varbits.length + 1);
+			this.varbits[varbits.length] = cooldownVarbit;
+		}
 	}
 
 	public String getNotificationMessage()
@@ -46,9 +58,10 @@ public final class BuffDefinition
 		return alertText;
 	}
 
-	public boolean isSpell()
+	/** The cooldown varbit, or {@link CastProof#NO_COOLDOWN} if there is none. */
+	public int getCooldownVarbit()
 	{
-		return spell;
+		return cooldownVarbit;
 	}
 
 	public int[] getVarbits()
