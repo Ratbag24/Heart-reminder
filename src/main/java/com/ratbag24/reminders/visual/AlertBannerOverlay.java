@@ -1,5 +1,6 @@
 package com.ratbag24.reminders.visual;
 
+import com.ratbag24.reminders.Alert;
 import com.ratbag24.reminders.RemindersConfig;
 import com.ratbag24.reminders.RemindersPlugin;
 import java.awt.Color;
@@ -16,10 +17,12 @@ import net.runelite.client.ui.overlay.OverlayPosition;
  * A banner saying what to do about it, in white on red, for anything currently
  * asking for attention.
  * <p>
- * This is the loud one. The status panel tells you how things stand and the
- * screen edge tells you something is wrong; this says which thing and what to
- * do, in words, big enough to read without looking away from the fight. Drag it
- * wherever suits.
+ * This is the loud one. The screen edge says something is wrong; this says
+ * which thing and what to do, in words, big enough to read without looking
+ * away from the fight. Drag it wherever suits.
+ * <p>
+ * Each line carries its own colour, set per reminder, so the ones that matter
+ * most to a given bit of content can be told apart at a glance.
  */
 public class AlertBannerOverlay extends Overlay
 {
@@ -50,7 +53,7 @@ public class AlertBannerOverlay extends Overlay
 			return null;
 		}
 
-		final List<String> alerts = plugin.getAlerts();
+		final List<Alert> alerts = plugin.getAlerts();
 
 		if (alerts.isEmpty())
 		{
@@ -60,16 +63,12 @@ public class AlertBannerOverlay extends Overlay
 		graphics.setFont(config.bannerFont().getFont());
 
 		final FontMetrics metrics = graphics.getFontMetrics();
-		final Color background = config.alertColour();
-		// Darker rather than lighter: it holds the banner's shape against a
-		// bright scene, where a pale outline washes out.
-		final Color border = background.darker();
 
 		int width = 0;
 
-		for (String alert : alerts)
+		for (Alert alert : alerts)
 		{
-			width = Math.max(width, metrics.stringWidth(alert));
+			width = Math.max(width, metrics.stringWidth(alert.getText()));
 		}
 
 		width += PAD_X * 2;
@@ -77,22 +76,27 @@ public class AlertBannerOverlay extends Overlay
 		final int lineHeight = metrics.getHeight() + PAD_Y * 2;
 		int y = 0;
 
-		for (String alert : alerts)
+		for (Alert alert : alerts)
 		{
+			final String text = alert.getText();
+			final Color background = alert.getColour();
+
 			graphics.setColor(background);
 			graphics.fillRect(0, y, width, lineHeight);
-			graphics.setColor(border);
+			// Darker rather than lighter: it holds the banner's shape against a
+			// bright scene, where a pale outline washes out.
+			graphics.setColor(background.darker());
 			graphics.drawRect(0, y, width - 1, lineHeight - 1);
 
-			final int textX = (width - metrics.stringWidth(alert)) / 2;
+			final int textX = (width - metrics.stringWidth(text)) / 2;
 			final int textY = y + PAD_Y + metrics.getAscent();
 
 			// Drawn twice: the game's background can be any colour, and a plain
 			// white string over a bright scene is hard to read without it.
 			graphics.setColor(Color.BLACK);
-			graphics.drawString(alert, textX + 1, textY + 1);
+			graphics.drawString(text, textX + 1, textY + 1);
 			graphics.setColor(Color.WHITE);
-			graphics.drawString(alert, textX, textY);
+			graphics.drawString(text, textX, textY);
 
 			y += lineHeight + GAP;
 		}

@@ -1,5 +1,6 @@
 package com.ratbag24.reminders.heart;
 
+import com.ratbag24.reminders.Alert;
 import com.ratbag24.reminders.Reminder;
 import com.ratbag24.reminders.ReminderContext;
 import com.ratbag24.reminders.RemindersConfig;
@@ -148,10 +149,10 @@ public class SaturatedHeartReminder implements Reminder
 
 	@Nullable
 	@Override
-	public String getAlertText()
+	public Alert getAlert()
 	{
 		return isNudging() && config.heartReminderOverlay()
-			? "Your " + lowerCaseName() + " is ready!"
+			? new Alert("Your " + lowerCaseName() + " is ready!", config.heartColour())
 			: null;
 	}
 

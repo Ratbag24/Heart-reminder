@@ -58,20 +58,6 @@ public interface RemindersConfig extends Config
 	}
 
 	@ConfigItem(
-		keyName = "alertColour",
-		name = "Alert banner colour",
-		description = "The background colour of the alert banner.",
-		section = generalSection,
-		position = 3
-	)
-	default Color alertColour()
-	{
-		// Sampled from the game's own red: slightly darker and less saturated
-		// than a flat red, which sits better over the scene behind it.
-		return new Color(156, 43, 36);
-	}
-
-	@ConfigItem(
 		keyName = "screenFlash",
 		name = "Flash the screen edge",
 		description = "Throb a coloured glow around the edge of the game view while any"
@@ -219,6 +205,19 @@ public interface RemindersConfig extends Config
 		return true;
 	}
 
+	@ConfigItem(
+		keyName = "heartColour",
+		name = "Banner colour",
+		description = "The colour of this reminder's banner, so the ones you care about"
+			+ " most can stand out from the rest.",
+		section = heartSection,
+		position = 9
+	)
+	default Color heartColour()
+	{
+		return new Color(156, 43, 36);
+	}
+
 	// ------------------------------------------------------------------
 	// Thrall
 	// ------------------------------------------------------------------
@@ -276,6 +275,19 @@ public interface RemindersConfig extends Config
 	default boolean thrallOnlyInCombat()
 	{
 		return true;
+	}
+
+	@ConfigItem(
+		keyName = "thrallColour",
+		name = "Banner colour",
+		description = "The colour of this reminder's banner, so the ones you care about"
+			+ " most can stand out from the rest.",
+		section = thrallSection,
+		position = 5
+	)
+	default Color thrallColour()
+	{
+		return new Color(156, 43, 36);
 	}
 
 	// ------------------------------------------------------------------
@@ -337,6 +349,19 @@ public interface RemindersConfig extends Config
 		return true;
 	}
 
+	@ConfigItem(
+		keyName = "vengeanceColour",
+		name = "Banner colour",
+		description = "The colour of this reminder's banner, so the ones you care about"
+			+ " most can stand out from the rest.",
+		section = vengeanceSection,
+		position = 5
+	)
+	default Color vengeanceColour()
+	{
+		return new Color(156, 43, 36);
+	}
+
 	// ------------------------------------------------------------------
 	// Divine potions
 	// ------------------------------------------------------------------
@@ -394,6 +419,19 @@ public interface RemindersConfig extends Config
 	default boolean divineOnlyInCombat()
 	{
 		return true;
+	}
+
+	@ConfigItem(
+		keyName = "divineColour",
+		name = "Banner colour",
+		description = "The colour of this reminder's banner, so the ones you care about"
+			+ " most can stand out from the rest.",
+		section = divineSection,
+		position = 5
+	)
+	default Color divineColour()
+	{
+		return new Color(156, 43, 36);
 	}
 
 	// ------------------------------------------------------------------
@@ -455,6 +493,19 @@ public interface RemindersConfig extends Config
 		return true;
 	}
 
+	@ConfigItem(
+		keyName = "deathChargeColour",
+		name = "Banner colour",
+		description = "The colour of this reminder's banner, so the ones you care about"
+			+ " most can stand out from the rest.",
+		section = deathChargeSection,
+		position = 5
+	)
+	default Color deathChargeColour()
+	{
+		return new Color(156, 43, 36);
+	}
+
 	// ------------------------------------------------------------------
 	// Shadow veil
 	// ------------------------------------------------------------------
@@ -512,6 +563,19 @@ public interface RemindersConfig extends Config
 	default boolean shadowVeilOnlyInCombat()
 	{
 		return false;
+	}
+
+	@ConfigItem(
+		keyName = "shadowVeilColour",
+		name = "Banner colour",
+		description = "The colour of this reminder's banner, so the ones you care about"
+			+ " most can stand out from the rest.",
+		section = shadowVeilSection,
+		position = 5
+	)
+	default Color shadowVeilColour()
+	{
+		return new Color(156, 43, 36);
 	}
 
 	// ------------------------------------------------------------------
@@ -573,6 +637,19 @@ public interface RemindersConfig extends Config
 		return true;
 	}
 
+	@ConfigItem(
+		keyName = "antifireColour",
+		name = "Banner colour",
+		description = "The colour of this reminder's banner, so the ones you care about"
+			+ " most can stand out from the rest.",
+		section = antifireSection,
+		position = 5
+	)
+	default Color antifireColour()
+	{
+		return new Color(156, 43, 36);
+	}
+
 	// ------------------------------------------------------------------
 	// Stamina
 	// ------------------------------------------------------------------
@@ -630,6 +707,19 @@ public interface RemindersConfig extends Config
 	default boolean staminaOnlyInCombat()
 	{
 		return false;
+	}
+
+	@ConfigItem(
+		keyName = "staminaColour",
+		name = "Banner colour",
+		description = "The colour of this reminder's banner, so the ones you care about"
+			+ " most can stand out from the rest.",
+		section = staminaSection,
+		position = 5
+	)
+	default Color staminaColour()
+	{
+		return new Color(156, 43, 36);
 	}
 
 	// ------------------------------------------------------------------
@@ -691,6 +781,19 @@ public interface RemindersConfig extends Config
 		return false;
 	}
 
+	@ConfigItem(
+		keyName = "magicImbueColour",
+		name = "Banner colour",
+		description = "The colour of this reminder's banner, so the ones you care about"
+			+ " most can stand out from the rest.",
+		section = magicImbueSection,
+		position = 5
+	)
+	default Color magicImbueColour()
+	{
+		return new Color(156, 43, 36);
+	}
+
 	// ------------------------------------------------------------------
 	// Menaphite remedy
 	// ------------------------------------------------------------------
@@ -748,6 +851,19 @@ public interface RemindersConfig extends Config
 	default boolean menaphiteRemedyOnlyInCombat()
 	{
 		return true;
+	}
+
+	@ConfigItem(
+		keyName = "menaphiteRemedyColour",
+		name = "Banner colour",
+		description = "The colour of this reminder's banner, so the ones you care about"
+			+ " most can stand out from the rest.",
+		section = menaphiteRemedySection,
+		position = 5
+	)
+	default Color menaphiteRemedyColour()
+	{
+		return new Color(156, 43, 36);
 	}
 
 	// ------------------------------------------------------------------
@@ -810,6 +926,19 @@ public interface RemindersConfig extends Config
 		return true;
 	}
 
+	@ConfigItem(
+		keyName = "markOfDarknessColour",
+		name = "Banner colour",
+		description = "The colour of this reminder's banner, so the ones you care about"
+			+ " most can stand out from the rest.",
+		section = markOfDarknessSection,
+		position = 5
+	)
+	default Color markOfDarknessColour()
+	{
+		return new Color(156, 43, 36);
+	}
+
 	// ------------------------------------------------------------------
 	// Ward of Arceuus
 	// ------------------------------------------------------------------
@@ -868,5 +997,18 @@ public interface RemindersConfig extends Config
 	default boolean wardOfArceuusOnlyInCombat()
 	{
 		return true;
+	}
+
+	@ConfigItem(
+		keyName = "wardOfArceuusColour",
+		name = "Banner colour",
+		description = "The colour of this reminder's banner, so the ones you care about"
+			+ " most can stand out from the rest.",
+		section = wardOfArceuusSection,
+		position = 5
+	)
+	default Color wardOfArceuusColour()
+	{
+		return new Color(156, 43, 36);
 	}
 }

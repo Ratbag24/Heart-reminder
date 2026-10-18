@@ -91,13 +91,15 @@ photosensitive players.
 
 ## Settings
 
-**General** — whether the alert banner shows, its size and its colour; whether
-the screen edge flashes and in what colour; and whether reminders also print in
-the chat box.
+**General** — whether the alert banner shows and how big; whether the screen
+edge flashes and in what colour; and whether reminders also print in the chat
+box.
 
-**Every reminder** has the same four: *Enable*, *Notify*, *Show in alert banner*
-and *Only while fighting*. So a reminder can be kept but quietened — notification
-only, no banner — rather than switched off entirely.
+**Every reminder** has the same five: *Enable*, *Notify*, *Show in alert banner*,
+*Only while fighting* and its own *Banner colour*. So a reminder can be kept but
+quietened — notification only, no banner — rather than switched off entirely, and
+the ones that matter most to whatever you are doing can be given a colour that
+stands out from the rest.
 
 **The heart** adds four of its own: which hearts to track, whether to show the
 cooldown timer, whether to light the heart up in your inventory, and whether to

@@ -1,5 +1,6 @@
 package com.ratbag24.reminders.buff;
 
+import com.ratbag24.reminders.Alert;
 import com.ratbag24.reminders.Reminder;
 import com.ratbag24.reminders.ReminderContext;
 import com.ratbag24.reminders.SpellbookLock;
@@ -106,9 +107,11 @@ public class BuffReminder implements Reminder
 
 	@Nullable
 	@Override
-	public String getAlertText()
+	public Alert getAlert()
 	{
-		return isNudging() && settings.isShowReminder() ? definition.getAlertText() : null;
+		return isNudging() && settings.isShowReminder()
+			? new Alert(definition.getAlertText(), settings.getColour())
+			: null;
 	}
 
 	private boolean conditionsMet()

@@ -71,13 +71,13 @@ public interface Reminder
 	}
 
 	/**
-	 * What the alert banner should say while this reminder is nudging, or null
-	 * when it has nothing to shout about. Phrased as the thing to do rather
-	 * than the state you are in: mid-fight, "You need to death charge!" lands
-	 * faster than "Death charge: down".
+	 * What the alert banner should show while this reminder is nudging, or null
+	 * when it has nothing to shout about. The wording is phrased as the thing
+	 * to do rather than the state you are in: mid-fight, "You need to death
+	 * charge!" lands faster than "Death charge: down".
 	 */
 	@Nullable
-	default String getAlertText()
+	default Alert getAlert()
 	{
 		return null;
 	}

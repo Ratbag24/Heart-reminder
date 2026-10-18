@@ -93,55 +93,64 @@ public class RemindersPlugin extends Plugin
 			config::thrallEnabled,
 			config::thrallNotification,
 			config::thrallReminderOverlay,
-			config::thrallOnlyInCombat)));
+			config::thrallOnlyInCombat,
+			config::thrallColour)));
 
 		reminders.add(new BuffReminder(reminderContext, Buffs.VENGEANCE, new BuffSettings(
 			config::vengeanceEnabled,
 			config::vengeanceNotification,
 			config::vengeanceReminderOverlay,
-			config::vengeanceOnlyInCombat)));
+			config::vengeanceOnlyInCombat,
+			config::vengeanceColour)));
 
 		reminders.add(new BuffReminder(reminderContext, Buffs.DIVINE_POTION, new BuffSettings(
 			config::divineEnabled,
 			config::divineNotification,
 			config::divineReminderOverlay,
-			config::divineOnlyInCombat)));
+			config::divineOnlyInCombat,
+			config::divineColour)));
 
 		reminders.add(new BuffReminder(reminderContext, Buffs.DEATH_CHARGE, new BuffSettings(
 			config::deathChargeEnabled,
 			config::deathChargeNotification,
 			config::deathChargeReminderOverlay,
-			config::deathChargeOnlyInCombat)));
+			config::deathChargeOnlyInCombat,
+			config::deathChargeColour)));
 
 		reminders.add(new BuffReminder(reminderContext, Buffs.SHADOW_VEIL, new BuffSettings(
 			config::shadowVeilEnabled,
 			config::shadowVeilNotification,
 			config::shadowVeilReminderOverlay,
-			config::shadowVeilOnlyInCombat)));
+			config::shadowVeilOnlyInCombat,
+			config::shadowVeilColour)));
 
 		reminders.add(new BuffReminder(reminderContext, Buffs.ANTIFIRE, new BuffSettings(
 			config::antifireEnabled,
 			config::antifireNotification,
 			config::antifireReminderOverlay,
-			config::antifireOnlyInCombat)));
+			config::antifireOnlyInCombat,
+			config::antifireColour)));
 
 		reminders.add(new BuffReminder(reminderContext, Buffs.STAMINA, new BuffSettings(
 			config::staminaEnabled,
 			config::staminaNotification,
 			config::staminaReminderOverlay,
-			config::staminaOnlyInCombat)));
+			config::staminaOnlyInCombat,
+			config::staminaColour)));
 
 		reminders.add(new BuffReminder(reminderContext, Buffs.MAGIC_IMBUE, new BuffSettings(
 			config::magicImbueEnabled,
 			config::magicImbueNotification,
 			config::magicImbueReminderOverlay,
-			config::magicImbueOnlyInCombat)));
+			config::magicImbueOnlyInCombat,
+			config::magicImbueColour)));
 
 		reminders.add(new BuffReminder(reminderContext, Buffs.MENAPHITE_REMEDY, new BuffSettings(
 			config::menaphiteRemedyEnabled,
 			config::menaphiteRemedyNotification,
 			config::menaphiteRemedyReminderOverlay,
-			config::menaphiteRemedyOnlyInCombat)));
+			config::menaphiteRemedyOnlyInCombat,
+			config::menaphiteRemedyColour)));
 
 		// These two have no varbit: they are timed from their chat message.
 		reminders.add(new ChatBuffReminder(reminderContext, ChatBuffs.MARK_OF_DARKNESS,
@@ -149,14 +158,16 @@ public class RemindersPlugin extends Plugin
 				config::markOfDarknessEnabled,
 				config::markOfDarknessNotification,
 				config::markOfDarknessReminderOverlay,
-				config::markOfDarknessOnlyInCombat)));
+				config::markOfDarknessOnlyInCombat,
+			config::markOfDarknessColour)));
 
 		reminders.add(new ChatBuffReminder(reminderContext, ChatBuffs.WARD_OF_ARCEUUS,
 			new BuffSettings(
 				config::wardOfArceuusEnabled,
 				config::wardOfArceuusNotification,
 				config::wardOfArceuusReminderOverlay,
-				config::wardOfArceuusOnlyInCombat)));
+				config::wardOfArceuusOnlyInCombat,
+			config::wardOfArceuusColour)));
 
 		for (Reminder reminder : reminders)
 		{
@@ -281,13 +292,13 @@ public class RemindersPlugin extends Plugin
 	 * What the alert banner should be shouting, one line per reminder that is
 	 * currently nudging. Read on the client thread while the overlay renders.
 	 */
-	public List<String> getAlerts()
+	public List<Alert> getAlerts()
 	{
-		List<String> alerts = null;
+		List<Alert> alerts = null;
 
 		for (Reminder reminder : reminders)
 		{
-			final String alert = reminder.getAlertText();
+			final Alert alert = reminder.getAlert();
 
 			if (alert != null)
 			{
