@@ -4,6 +4,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
+import net.runelite.api.gameval.VarbitID;
 import net.runelite.client.Notifier;
 import net.runelite.client.chat.ChatColorType;
 import net.runelite.client.chat.ChatMessageBuilder;
@@ -44,6 +45,15 @@ public class ReminderContext
 	public RemindersConfig getConfig()
 	{
 		return config;
+	}
+
+	/**
+	 * Whatever number the game currently gives for the spellbook. Its meaning
+	 * is never assumed; see {@link SpellbookLock}.
+	 */
+	public int getSpellbook()
+	{
+		return client.getVarbitValue(VarbitID.SPELLBOOK);
 	}
 
 	/** Whether the player has dealt or taken damage recently enough to count. */

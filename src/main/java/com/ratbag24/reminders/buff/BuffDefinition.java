@@ -12,6 +12,7 @@ public final class BuffDefinition
 {
 	private final String notificationMessage;
 	private final String alertText;
+	private final boolean spell;
 	private final int[] varbits;
 
 	/**
@@ -21,10 +22,17 @@ public final class BuffDefinition
 	 * @param varbits              every varbit that is non-zero while any part
 	 *                             of the buff is still running
 	 */
-	public BuffDefinition(String notificationMessage, String alertText, int... varbits)
+	/**
+	 * @param spell  true for something cast from a spellbook, so its reminder
+	 *               can tie itself to the book it was cast from; false for a
+	 *               potion or an item, which work wherever you are
+	 */
+	public BuffDefinition(String notificationMessage, String alertText, boolean spell,
+		int... varbits)
 	{
 		this.notificationMessage = notificationMessage;
 		this.alertText = alertText;
+		this.spell = spell;
 		this.varbits = varbits.clone();
 	}
 
@@ -36,6 +44,11 @@ public final class BuffDefinition
 	public String getAlertText()
 	{
 		return alertText;
+	}
+
+	public boolean isSpell()
+	{
+		return spell;
 	}
 
 	public int[] getVarbits()

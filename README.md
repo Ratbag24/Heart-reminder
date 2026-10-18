@@ -81,6 +81,9 @@ you want it by casting it once.
 - The **heart lights up in your inventory** until you use it.
 - **Only while fighting**, on by default for the combat buffs, so nothing
   follows you round the bank.
+- **Only on the right spellbook.** A spell's reminder goes quiet while you are
+  on a book it cannot be cast from, so switching to standard for other content
+  does not mean switching reminders off and on again.
 
 The pulse is a slow sine, one cycle every 1.4 seconds, rather than a blink. A
 hard flash at a few hertz is harder to ignore for everyone and a real problem for
@@ -121,6 +124,14 @@ guessed, and the panel just says "Heart".
 
 Its boost and its cooldown run out together, so a heart still on cooldown counts
 as **up**: the thing you would re-apply is still working.
+
+**Which spellbook you are on** is read from a varbit, but what its values mean
+is game data rather than anything fixed — RuneLite reads it as an index into one
+of the game's own enums rather than hardcoding "three means Arceuus". So nothing
+is assumed here either. A thrall can only be summoned from Arceuus, so the
+spellbook you are on when one appears *is* Arceuus, whatever number the game
+gives it; that value is recorded on the first cast and compared from then on. It
+cannot be wrong, because it was observed rather than guessed.
 
 **Everything else** is reported through varbits that are non-zero while any part
 of the buff is running, so one implementation covers them all: the buff is gone

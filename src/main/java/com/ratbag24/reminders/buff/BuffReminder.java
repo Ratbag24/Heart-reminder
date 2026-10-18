@@ -2,6 +2,7 @@ package com.ratbag24.reminders.buff;
 
 import com.ratbag24.reminders.Reminder;
 import com.ratbag24.reminders.ReminderContext;
+import com.ratbag24.reminders.SpellbookLock;
 import javax.annotation.Nullable;
 import net.runelite.api.events.VarbitChanged;
 
@@ -20,6 +21,7 @@ public class BuffReminder implements Reminder
 	private final BuffDefinition definition;
 	private final BuffSettings settings;
 	private final BuffState state;
+	private final SpellbookLock spellbook = new SpellbookLock();
 
 	public BuffReminder(ReminderContext ctx, BuffDefinition definition, BuffSettings settings)
 	{
@@ -39,6 +41,7 @@ public class BuffReminder implements Reminder
 	public void reset()
 	{
 		state.reset();
+		spellbook.reset();
 	}
 
 	@Override
@@ -48,6 +51,13 @@ public class BuffReminder implements Reminder
 		// switching it on does not need a re-login to read right.
 		final BuffState.Transition transition =
 			state.onVarbitValue(event.getVarbitId(), event.getValue());
+
+		if (transition == BuffState.Transition.ACTIVE && definition.isSpell())
+		{
+			// Casting it proves which spellbook it lives on, whatever the game
+			// numbers that book as.
+			spellbook.learn(ctx.getSpellbook());
+		}
 
 		if (transition == BuffState.Transition.EXPIRED && isEnabled() && conditionsMet())
 		{
@@ -84,7 +94,14 @@ public class BuffReminder implements Reminder
 
 		// Nothing is said to a player who has not had this buff up at all: not
 		// having cast vengeance is the normal state for most of the game.
-		return state.hasBeenActive() && conditionsMet();
+		if (!state.hasBeenActive() || !conditionsMet())
+		{
+			return false;
+		}
+
+		// And nothing about a spell from a book you are not on: asking for a
+		// thrall while on the standard spellbook is noise, not a reminder.
+		return spellbook.allows(ctx.getSpellbook());
 	}
 
 	@Nullable

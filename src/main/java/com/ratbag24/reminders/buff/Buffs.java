@@ -17,6 +17,11 @@ import net.runelite.api.gameval.VarbitID;
  * one saying the buff is up. A buff can be gone while the spell that applies it
  * is still unavailable, and telling someone to cast something they cannot cast
  * is worse than saying nothing.
+ * <p>
+ * The boolean on each one says whether it comes from a spellbook. Those tie
+ * their reminder to the book they were cast from, so switching books for other
+ * content quietens them without anyone touching a setting; potions work
+ * wherever you are and so do not.
  */
 public final class Buffs
 {
@@ -30,6 +35,7 @@ public final class Buffs
 	public static final BuffDefinition THRALL = new BuffDefinition(
 		"Your thrall has expired.",
 		"You need a thrall!",
+		true,
 		VarbitID.ARCEUUS_RESURRECTION_ACTIVE,
 		VarbitID.ARCEUUS_RESURRECTION_COOLDOWN);
 
@@ -41,6 +47,7 @@ public final class Buffs
 	public static final BuffDefinition VENGEANCE = new BuffDefinition(
 		"Vengeance is ready to cast.",
 		"You need vengeance!",
+		true,
 		VarbitID.VENGEANCE_TIMELIMIT,
 		VarbitID.VENGEANCE_REBOUND);
 
@@ -52,6 +59,7 @@ public final class Buffs
 	public static final BuffDefinition DIVINE_POTION = new BuffDefinition(
 		"Your divine potion has worn off.",
 		"You need a divine potion!",
+		false,
 		VarbitID.DIVINECOMBAT_POTION_TIME,
 		VarbitID.DIVINEATTACK_POTION_TIME,
 		VarbitID.DIVINESTRENGTH_POTION_TIME,
@@ -75,6 +83,7 @@ public final class Buffs
 	public static final BuffDefinition DEATH_CHARGE = new BuffDefinition(
 		"Your death charge is ready to cast again.",
 		"You need to death charge!",
+		true,
 		VarbitID.ARCEUUS_DEATH_CHARGE_ACTIVE,
 		VarbitID.ARCEUUS_DEATH_CHARGE_COOLDOWN);
 
@@ -82,6 +91,7 @@ public final class Buffs
 	public static final BuffDefinition SHADOW_VEIL = new BuffDefinition(
 		"Your shadow veil has expired.",
 		"You need shadow veil!",
+		true,
 		VarbitID.ARCEUUS_SHADOW_VEIL_ACTIVE,
 		VarbitID.ARCEUUS_SHADOW_VEIL_COOLDOWN);
 
@@ -92,6 +102,7 @@ public final class Buffs
 	public static final BuffDefinition ANTIFIRE = new BuffDefinition(
 		"Your antifire has run out.",
 		"You need antifire!",
+		false,
 		VarbitID.ANTIFIRE_POTION,
 		VarbitID.SUPER_ANTIFIRE_POTION);
 
@@ -99,18 +110,21 @@ public final class Buffs
 	public static final BuffDefinition STAMINA = new BuffDefinition(
 		"Your stamina potion has run out.",
 		"You need stamina!",
+		false,
 		VarbitID.STAMINA_DURATION);
 
-	/** Magic imbue, for the runes it saves on alchemy and superheating. */
+	/** Magic imbue, a Lunar spell, for the runes it saves on superheating. */
 	public static final BuffDefinition MAGIC_IMBUE = new BuffDefinition(
 		"Your magic imbue has run out.",
 		"You need magic imbue!",
+		true,
 		VarbitID.MAGIC_IMBUE_ACTIVE);
 
 	/** Menaphite remedy, which keeps stats topped up while it lasts. */
 	public static final BuffDefinition MENAPHITE_REMEDY = new BuffDefinition(
 		"Your menaphite remedy has worn off.",
 		"You need a menaphite remedy!",
+		false,
 		VarbitID.STATRENEWAL_POTION_TIMER);
 
 	private Buffs()

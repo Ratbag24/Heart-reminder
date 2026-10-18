@@ -2,6 +2,7 @@ package com.ratbag24.reminders.chat;
 
 import com.ratbag24.reminders.Reminder;
 import com.ratbag24.reminders.ReminderContext;
+import com.ratbag24.reminders.SpellbookLock;
 import com.ratbag24.reminders.buff.BuffSettings;
 import javax.annotation.Nullable;
 import net.runelite.api.ChatMessageType;
@@ -21,6 +22,7 @@ public class ChatBuffReminder implements Reminder
 	private final ChatBuffDefinition definition;
 	private final BuffSettings settings;
 	private final TimedBuffState state = new TimedBuffState();
+	private final SpellbookLock spellbook = new SpellbookLock();
 
 	public ChatBuffReminder(ReminderContext ctx, ChatBuffDefinition definition,
 		BuffSettings settings)
@@ -40,6 +42,7 @@ public class ChatBuffReminder implements Reminder
 	public void reset()
 	{
 		state.reset();
+		spellbook.reset();
 	}
 
 	@Override
@@ -60,6 +63,10 @@ public class ChatBuffReminder implements Reminder
 		// that counts: a boost does not buy a longer mark.
 		state.start(ctx.getClient().getTickCount(),
 			ctx.getClient().getRealSkillLevel(Skill.MAGIC));
+
+		// Both of these are Arceuus spells, so hearing one cast says which book
+		// that is without anything having to be assumed about the numbering.
+		spellbook.learn(ctx.getSpellbook());
 	}
 
 	@Override
@@ -85,7 +92,7 @@ public class ChatBuffReminder implements Reminder
 			return false;
 		}
 
-		return !onCooldown();
+		return !onCooldown() && spellbook.allows(ctx.getSpellbook());
 	}
 
 	/** Whether the spell still cannot be cast, where the game says so. */
