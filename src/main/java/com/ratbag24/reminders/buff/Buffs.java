@@ -9,21 +9,29 @@ import net.runelite.api.gameval.VarbitID;
  * as gone once every one of them has reached zero. Adding another is a constant
  * here, a config section, and a line in the plugin's registry.
  * <p>
- * Ward of Arceuus and Mark of Darkness are deliberately absent: the game gives
- * them no varbit while they are up, so RuneLite's own timers work them out from
- * chat messages and a duration. That is a different mechanism from everything
- * here, and guessing at it would be worse than leaving them out.
+ * Ward of Arceuus and Mark of Darkness live in the chat package instead: the
+ * game gives them no varbit while they are up, so they have to be timed from
+ * the chat line that announces them.
+ * <p>
+ * Where a spell has a cooldown of its own, that varbit is watched alongside the
+ * one saying the buff is up. A buff can be gone while the spell that applies it
+ * is still unavailable, and telling someone to cast something they cannot cast
+ * is worse than saying nothing.
  */
 public final class Buffs
 {
 	/**
 	 * A thrall lasts one tick per Magic level, doubled at Grandmaster combat
 	 * achievement tier, and its varbit drops to zero the moment it leaves.
+	 * <p>
+	 * The cooldown is watched alongside it so the reminder cannot ask for a
+	 * thrall that cannot yet be summoned.
 	 */
 	public static final BuffDefinition THRALL = new BuffDefinition(
 		"Your thrall has expired.",
 		"You need a thrall!",
-		VarbitID.ARCEUUS_RESURRECTION_ACTIVE);
+		VarbitID.ARCEUUS_RESURRECTION_ACTIVE,
+		VarbitID.ARCEUUS_RESURRECTION_COOLDOWN);
 
 	/**
 	 * Vengeance can only be re-cast once its cooldown has run out <em>and</em>
@@ -53,17 +61,25 @@ public final class Buffs
 		VarbitID.DIVINEBASTION_POTION_TIME,
 		VarbitID.DIVINEBATTLEMAGE_POTION_TIME);
 
-	/** Death charge lasts a tick per Magic level and is worth re-casting at once. */
+	/**
+	 * Death charge is spent on a kill rather than running down a clock, and the
+	 * spell then sits on a minute's cooldown regardless. Watching the charge
+	 * alone announced "you need to death charge" the moment a kill used it up,
+	 * a minute before it could actually be cast; the cooldown is watched with
+	 * it so the reminder waits until the spell is available.
+	 */
 	public static final BuffDefinition DEATH_CHARGE = new BuffDefinition(
-		"Your death charge has expired.",
+		"Your death charge is ready to cast again.",
 		"You need to death charge!",
-		VarbitID.ARCEUUS_DEATH_CHARGE_ACTIVE);
+		VarbitID.ARCEUUS_DEATH_CHARGE_ACTIVE,
+		VarbitID.ARCEUUS_DEATH_CHARGE_COOLDOWN);
 
-	/** Shadow veil, for thieving and for staying unseen. */
+	/** Shadow veil, for thieving, with its cooldown watched the same way. */
 	public static final BuffDefinition SHADOW_VEIL = new BuffDefinition(
 		"Your shadow veil has expired.",
 		"You need shadow veil!",
-		VarbitID.ARCEUUS_SHADOW_VEIL_ACTIVE);
+		VarbitID.ARCEUUS_SHADOW_VEIL_ACTIVE,
+		VarbitID.ARCEUUS_SHADOW_VEIL_COOLDOWN);
 
 	/**
 	 * Both antifire varbits together: a super antifire running out while an

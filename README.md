@@ -11,13 +11,15 @@ Twelve buffs, each switchable on its own.
 - **Saturated / imbued heart** — also gets a cooldown timer, and lights up in
   your inventory when it is ready
 - **Thrall** — lasts a tick per Magic level, doubled at Grandmaster combat
-  achievement tier
+  achievement tier, and its cooldown is watched too
 - **Vengeance** — ready once the cooldown ends *and* the held cast has rebounded,
   so it waits for whichever happens second
 - **Divine potions** — all eight varbits watched together, so one potion reminds
   once rather than four times
-- **Death charge** — lasts a tick per Magic level
-- **Shadow veil** — for thieving, so it is not combat-gated by default
+- **Death charge** — spent by a kill rather than by running down, so the
+  reminder waits out the spell's minute of cooldown before asking again
+- **Shadow veil** — for thieving, so it is not combat-gated by default; its
+  cooldown is watched too
 - **Antifire** — plain and super watched together, so a super running out under
   an ordinary one says nothing
 - **Stamina** — about running rather than fighting, so not combat-gated by
@@ -121,7 +123,10 @@ as **up**: the thing you would re-apply is still working.
 
 **Everything else** is reported through varbits that are non-zero while any part
 of the buff is running, so one implementation covers them all: the buff is gone
-once *every* one of its varbits reaches zero. That matters in both directions —
+once *every* one of its varbits reaches zero. Where a spell has a cooldown, that
+varbit is watched alongside the one saying the buff is up, because a buff can be
+gone while the spell that applies it is still unavailable — and telling someone
+to cast something they cannot cast is worse than saying nothing. That matters in both directions —
 vengeance needs both its cooldown and its rebound varbit clear, and a divine
 potion sets its own timer plus one per stat, so watching all eight is what stops
 one potion reminding four times.

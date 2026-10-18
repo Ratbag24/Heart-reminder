@@ -68,7 +68,8 @@ public class ChatBuffReminder implements Reminder
 		final TimedBuffState.Transition transition =
 			state.onTick(ctx.getClient().getTickCount());
 
-		if (transition == TimedBuffState.Transition.EXPIRED && isEnabled() && conditionsMet())
+		if (transition == TimedBuffState.Transition.EXPIRED && isEnabled() && conditionsMet()
+			&& !onCooldown())
 		{
 			ctx.announce(settings.getNotification(), definition.getNotificationMessage());
 		}
@@ -79,7 +80,19 @@ public class ChatBuffReminder implements Reminder
 	{
 		// Nothing is claimed about a spell whose cast was never heard, which is
 		// what logging in mid-buff looks like from here.
-		return isEnabled() && !state.isActive() && state.hasBeenActive() && conditionsMet();
+		if (!isEnabled() || state.isActive() || !state.hasBeenActive() || !conditionsMet())
+		{
+			return false;
+		}
+
+		return !onCooldown();
+	}
+
+	/** Whether the spell still cannot be cast, where the game says so. */
+	private boolean onCooldown()
+	{
+		return definition.hasCooldownVarbit()
+			&& ctx.getClient().getVarbitValue(definition.getCooldownVarbit()) > 0;
 	}
 
 	@Nullable

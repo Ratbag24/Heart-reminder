@@ -170,6 +170,49 @@ public class BuffStateTest
 	}
 
 	@Test
+	public void aChargeSpentOnAKillSaysNothingWhileTheSpellIsStillOnCooldown()
+	{
+		// Reported from a live game: death charge is spent by a kill rather than
+		// by running down, and the spell then sits on a minute's cooldown. The
+		// charge going to zero is not the moment to ask for another one.
+		final int ACTIVE = 12411;
+		final int COOLDOWN = 12138;
+		BuffState deathCharge = new BuffState(ACTIVE, COOLDOWN);
+		deathCharge.sync(new int[]{0, 0});
+
+		// Cast it: charged, and the spell goes on cooldown.
+		assertEquals(Transition.ACTIVE, deathCharge.onVarbitValue(ACTIVE, 1));
+		assertEquals(Transition.NONE, deathCharge.onVarbitValue(COOLDOWN, 1));
+
+		// A kill spends the charge, but it still cannot be re-cast.
+		assertEquals(Transition.NONE, deathCharge.onVarbitValue(ACTIVE, 0));
+		assertTrue(deathCharge.isActive());
+
+		// Only once the cooldown ends is there anything worth saying.
+		assertEquals(Transition.EXPIRED, deathCharge.onVarbitValue(COOLDOWN, 0));
+		assertFalse(deathCharge.isActive());
+	}
+
+	@Test
+	public void aBuffThatOutlastsItsCooldownStillRemindsWhenItEnds()
+	{
+		// The other order: a thrall's cooldown is far shorter than the thrall,
+		// so the cooldown clears first and the thrall leaving is the event.
+		final int ACTIVE = 12413;
+		final int COOLDOWN = 12290;
+		BuffState thrall = new BuffState(ACTIVE, COOLDOWN);
+		thrall.sync(new int[]{0, 0});
+
+		thrall.onVarbitValue(ACTIVE, 1);
+		thrall.onVarbitValue(COOLDOWN, 1);
+
+		assertEquals(Transition.NONE, thrall.onVarbitValue(COOLDOWN, 0));
+		assertTrue(thrall.isActive());
+
+		assertEquals(Transition.EXPIRED, thrall.onVarbitValue(ACTIVE, 0));
+	}
+
+	@Test
 	public void negativeValuesCountAsZero()
 	{
 		BuffState thrall = new BuffState(THRALL);
